@@ -40,3 +40,5 @@ To install FireBlog, follow these steps:
 After installing and running FireBlog, you can sign up for a new account or log in if you already have one. Once logged in, you will be greeted with an intuitive interface where you can create and publish your own blogs. Explore the vibrant community by browsing and reading blogs from other users. Enjoy a seamless user experience with smooth navigation and responsive UI updates.
 
 ## System Diagram
+![system-diagram](https://github.com/ahmaddioxide/FireBlog/assets/75989502/cd92b52b-10a8-4a4d-9963-85091d7fbe58)
+
