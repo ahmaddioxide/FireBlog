@@ -20,7 +20,7 @@ FireBlog is a user-friendly Flutter app for creating and reading blogs, featurin
     - I want to be able to add my social media links to my profile.
     - I want to be able to add my profile picture.
 
-- [x] Exclusive Features and Blogger Community:
+- [x] Exclusive Features:
     - I want to be able to create and publish my own blogs with rich content.
     - I want to be able to browse and read blogs created by other users.
     - I want to be able to explore the vibrant community and discover new ideas.
