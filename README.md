@@ -14,22 +14,24 @@ FireBlog is a user-friendly Flutter app for creating and reading blogs, featurin
 - In the realm of blogging, FireBlog emerges as a sleek and user-friendly app, designed to empower users in their creative journey. Seamlessly blending innovative features with reliable security measures, it beckons users to embark on a seamless experience.
 
 ## Story Features
-- [x] Registration and Login:
-  - I want to register for a new account and log in to the app.
-    - I want to be able to log in to the app using my Google account.
-    - I want to be able to add my social media links to my profile.
-    - I want to be able to add my profile picture.
 
-- [x] Exclusive Features:
-    - I want to be able to create and publish my own blogs with rich content.
-    - I want to be able to browse and read blogs created by other users.
-    - I want to be able to explore the vibrant community and discover new ideas.
-    - I will able edit and delete my own blogs.
-    - I want to be able to like other users' blogs.
-    - I want to be able to see social media links of other users.
-    - I want to be able to see the number of views on other users' blogs.
-    - I want to be able to see the number of followers of other users.
-    - I want to be able to see the number of blogs published by other users.
+  - As a user, I want to register for a new account and log in to the app to access all the features and functionalities.
+
+  - As a user, I want to create and publish my own blogs with rich content so that I can express my ideas and stories to a wider audience.
+
+  - As a user, I want to browse and read blogs created by other users to explore new ideas and perspectives within the community.
+
+  - As a user, I want the ability to edit and delete my own blogs to maintain control over my content.
+
+  - As a user, I want the option to like other users' blogs to show appreciation for their work.
+
+  - As a user, I want to see social media links of other users to connect and engage with them outside of the app.
+
+  - As a user, I want to see the number of views on other users' blogs to gauge their popularity and relevance.
+
+  - As a user, I want to see the number of followers of other users to understand their influence within the community.
+
+  - As a user, I want to see the number of blogs published by other users to gain insights into their activity and contributions.
 
 
 
