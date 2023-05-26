@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "994630950681",
+    "project_id": "fireblog-64987",
+    "storage_bucket": "fireblog-64987.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994630950681:android:2eff6bcaa3c4bd96852f88",
+        "android_client_info": {
+          "package_name": "com.cybrnode.fireblog"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCuXLnpvFjRusBSkMUo2j7ont7BvFzJJ64"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
