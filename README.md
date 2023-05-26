@@ -52,6 +52,6 @@ After installing and running FireBlog, you can sign up for a new account or log 
 
 ## ERD
 <p align="center">
-  <img src="https://github.com/ahmaddioxide/FireBlog/assets/75989502/92e857d3-b5a7-4138-9019-812528014a32">
+  <img src="https://github.com/ahmaddioxide/FireBlog/assets/75989502/2ac405bd-6a0f-4862-b238-88ab77819b6f">
 </p>
 
