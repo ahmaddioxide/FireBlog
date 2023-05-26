@@ -14,20 +14,24 @@ FireBlog is a user-friendly Flutter app for creating and reading blogs, featurin
 - In the realm of blogging, FireBlog emerges as a sleek and user-friendly app, designed to empower users in their creative journey. Seamlessly blending innovative features with reliable security measures, it beckons users to embark on a seamless experience.
 
 ## Story Features
-- [x] Registration and Secure Login:
-
-    - I want a secure registration process to create an account on the app, ensuring the safety of my personal information.
-    - I want a robust authentication system that guarantees secure login, protecting my account from unauthorized access.
+- [x] Registration and Login:
+  - I want to register for a new account and log in to the app.
+    - I want to be able to log in to the app using my Google account.
+    - I want to be able to add my social media links to my profile.
+    - I want to be able to add my profile picture.
 
 - [x] Exclusive Features and Blogger Community:
-    - I want access to exclusive features that enhance my blogging experience, such as customizable profiles, social networking features, and engagement metrics.
+    - I want to be able to create and publish my own blogs with rich content.
+    - I want to be able to browse and read blogs created by other users.
+    - I want to be able to explore the vibrant community and discover new ideas.
+    - I will able edit and delete my own blogs.
+    - I want to be able to like other users' blogs.
+    - I want to be able to see social media links of other users.
+    - I want to be able to see the number of views on other users' blogs.
+    - I want to be able to see the number of followers of other users.
+    - I want to be able to see the number of blogs published by other users.
 
-- [x] Creating Blogs:
-    - I want to create and publish my own blogs with rich content to showcase my ideas, insights, and stories.
 
-- [x] Reading Blogs:
-    - I want to browse and read blogs created by other users to explore the vibrant community and discover new ideas.
-    - I want a seamless browsing experience that allows me to explore a diverse range of blogs created by others, spanning different topics and genres.
 
 ## Technologies Used
 - Flutter for mobile app development
