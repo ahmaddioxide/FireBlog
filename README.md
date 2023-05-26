@@ -50,3 +50,8 @@ After installing and running FireBlog, you can sign up for a new account or log 
 ## System Diagram
 ![system-diagram](https://github.com/ahmaddioxide/FireBlog/assets/75989502/cd92b52b-10a8-4a4d-9963-85091d7fbe58)
 
+## ERD
+<p align="center">
+  <img src="https://github.com/ahmaddioxide/FireBlog/assets/75989502/92e857d3-b5a7-4138-9019-812528014a32">
+</p>
+
