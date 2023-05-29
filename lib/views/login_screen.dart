@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import '../controllers/auth_controller..dart';
 
-class Registration extends StatefulWidget {
-  const Registration({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _RegistrationState createState() => _RegistrationState();
+  _LoginState createState() => _LoginState();
 }
 
-class _RegistrationState extends State<Registration> {
+class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
   AuthController _authController = AuthController();
   bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -31,7 +26,7 @@ class _RegistrationState extends State<Registration> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Registration"),
+        title: const Text("Login"),
         centerTitle: true,
       ),
       body: Padding(
@@ -43,18 +38,6 @@ class _RegistrationState extends State<Registration> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextFormField(
-                    controller: _nameController,
-                    decoration: const InputDecoration(
-                      labelText: "Name",
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.person),
-                    ),
-                    validator: (value) {
-                      // Validation logic
-                    },
-                  ),
-                  const SizedBox(height: 16.0),
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
@@ -91,55 +74,21 @@ class _RegistrationState extends State<Registration> {
                       // Validation logic
                     },
                   ),
-                  const SizedBox(height: 16.0),
-                  TextFormField(
-                    controller: _confirmPasswordController,
-                    obscureText: _obscureConfirmPassword,
-                    decoration: InputDecoration(
-                      labelText: "Confirm Password",
-                      border: const OutlineInputBorder(),
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureConfirmPassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        },
-                      ),
-                    ),
-                    validator: (value) {
-                      // Validation logic
-                    },
-                  ),
                   const SizedBox(height: 24.0),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
-                          _authController.signUp(
+                          _authController.login(
                             context,
                             _emailController.text.toString().trim(),
                             _passwordController.text.toString().trim(),
-                            _nameController.text.toString().trim(),
                           );
                         }
                       },
-                      child: const Text("Register"),
+                      child: const Text("Login"),
                     ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  TextButton(
-                    onPressed: () {
-                      // Navigate to the login screen
-                      Navigator.pushReplacementNamed(context, '/login');
-                    },
-                    child: const Text("Already have an account? Log in"),
                   ),
                 ],
               ),
