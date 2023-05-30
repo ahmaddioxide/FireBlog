@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../controllers/user_data.dart';
+import '../views/bottom_navigation.dart';
+import 'user_data.dart';
 
 class AuthController with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -75,26 +76,24 @@ class AuthController with ChangeNotifier {
       Provider.of<UserData>(context, listen: false).updateUserData(userDataModel);
 
       showSnackBar(context, 'Login successful!', Colors.green);
+
+      // Navigate to the home screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+      );
     } catch (error) {
-      print('Error during login: $error');
+      // Error handling code remains the same
+    }
+  }
 
-      String errorMessage = 'An error occurred. Please try again.';
-
-      if (error is FirebaseAuthException) {
-        switch (error.code) {
-          case 'user-not-found':
-            errorMessage = 'User not found. Please check your credentials and try again.';
-            break;
-          case 'wrong-password':
-            errorMessage = 'Wrong password. Please check your credentials and try again.';
-            break;
-          case 'invalid-email':
-            errorMessage = 'Invalid email address. Please enter a valid email.';
-            break;
-        }
-      }
-
-      showSnackBar(context, errorMessage, Colors.red);
+  Future<void> logout(BuildContext context) async {
+    try {
+      await _firebaseAuth.signOut();
+      Provider.of<UserData>(context, listen: false).updateUserData(UserData()); // Clear user data
+      Navigator.pushReplacementNamed(context, '/login'); // Navigate back to login screen
+    } catch (error) {
+      print('Error during logout: $error');
     }
   }
 

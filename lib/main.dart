@@ -1,5 +1,7 @@
+import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:fireblog/views/registration_screen.dart';
 import 'package:fireblog/views/onboarding_screen.dart';
+import 'package:fireblog/views/social_media_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -12,8 +14,6 @@ import 'package:device_preview/device_preview.dart';
 
 import 'views/login_screen.dart';
 
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -22,8 +22,15 @@ Future<void> main() async {
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
-      builder: (context) => ChangeNotifierProvider(
-        create: (context) => AuthController(),
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthController>(
+            create: (context) => AuthController(),
+          ),
+          ChangeNotifierProvider<UserData>(
+            create: (context) => UserData(),
+          ),
+        ],
         child: MyApp(),
       ),
     ),
@@ -35,30 +42,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<UserData>(
-      create: (_) => UserData(),
-      child: MaterialApp(
-        useInheritedMediaQuery: true,
-        locale: DevicePreview.locale(context),
-        title: 'FireBlog',
-        theme: ThemeData(
-          primarySwatch: Colors.brown,
-          textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
-        ),
-        home: Consumer<AuthController>(
-          builder: (context, authController, _) {
-            if (authController.currentUser != null) {
-              return const Registration();
-            } else {
-              return const OnBoardingPage();
-            }
-          },
-        ),
-        routes: {
-          '/login': (context) => const Login(), // Replace LoginScreen with your login screen widget
+    return MaterialApp(
+      builder: DevicePreview.appBuilder,
+      locale: DevicePreview.locale(context),
+      title: 'FireBlog',
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+        textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
+      ),
+      home: Consumer<AuthController>(
+        builder: (context, authController, _) {
+          if (authController.currentUser != null) {
+            return const HomeScreen();
+          } else {
+            return const OnBoardingPage();
+          }
         },
       ),
+      routes: {
+        '/login': (context) => const Login(),
+        '/registration': (context) => const Registration(),
+        '/social_media_links': (context) => const SocialMediaInput(),
+      },
     );
   }
 }
-

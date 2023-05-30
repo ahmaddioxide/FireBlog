@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 
 class UserData with ChangeNotifier {
-  late String name;
-  late String email;
+  String name;
+  String email;
+  String? _userId;
 
   UserData({
-     this.name='',
-     this.email='',
+    this.name = '',
+    this.email = '',
   });
+
+  String? get userId => _userId;
+
+  void setUserId(String? userId) {
+    _userId = userId;
+    notifyListeners();
+  }
 
   void updateUserData(UserData newData) {
     name = newData.name;
