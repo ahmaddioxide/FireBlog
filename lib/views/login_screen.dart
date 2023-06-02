@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 import '../controllers/auth_controller..dart';
 
 class Login extends StatefulWidget {
@@ -14,6 +16,7 @@ class _LoginState extends State<Login> {
   TextEditingController _passwordController = TextEditingController();
   AuthController _authController = AuthController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -78,16 +81,33 @@ class _LoginState extends State<Login> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
                         if (_formKey.currentState!.validate()) {
-                          _authController.login(
+                          setState(() {
+                            _isLoading = true;
+                          });
+                          await _authController.login(
                             context,
                             _emailController.text.toString().trim(),
                             _passwordController.text.toString().trim(),
                           );
+                          setState(() {
+                            _isLoading = false;
+                          });
                         }
                       },
-                      child: const Text("Login"),
+                      child: _isLoading
+                          ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: SpinKitWave(
+                          color: Colors.white,
+                          size: 10,
+                        ),
+                      )
+                          : const Text("Login"),
                     ),
                   ),
                 ],

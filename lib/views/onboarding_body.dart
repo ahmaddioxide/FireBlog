@@ -125,6 +125,13 @@ class _OnboardingBodyState extends State<OnboardingBody> {
                                   EdgeInsets.symmetric(vertical: height * 0.03),
                               child: GestureDetector(
                                 onTap: () {
+                                  if (currentPage == onboardData.length - 1) {
+                                    Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Registration()));
+                                  }
                                   _controller.nextPage(
                                     duration: const Duration(milliseconds: 200),
                                     curve: Curves.bounceIn,

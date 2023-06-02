@@ -1,5 +1,6 @@
 import 'package:fireblog/views/social_media_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../controllers/auth_controller..dart';
 
@@ -19,7 +20,6 @@ class _RegistrationState extends State<Registration> {
   AuthController _authController = AuthController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
-  bool _linkTested = false;
 
   @override
   void dispose() {
@@ -168,30 +168,46 @@ class _RegistrationState extends State<Registration> {
                   const SizedBox(height: 24.0),
                   SizedBox(
                     width: double.infinity,
+                    height: 50.0,
                     child: ElevatedButton(
+
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          _linkTested = await Navigator.push(
+
+                        if (_formKey.currentState!.validate() && !_authController.loading) {
+                          setState(() {
+                            _authController.setLoading(true);
+                          });
+                          await _authController.signUp(
                             context,
-                            MaterialPageRoute(builder: (context) => SocialMediaInput()),
+                            _emailController.text.toString().trim(),
+                            _passwordController.text.toString().trim(),
+                            _nameController.text.toString().trim(),
                           );
-                          if (_linkTested) {
-                            _authController.signUp(
-                              context,
-                              _emailController.text.toString().trim(),
-                              _passwordController.text.toString().trim(),
-                              _nameController.text.toString().trim(),
-                            );
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Please test at least one link.'),
-                              ),
-                            );
-                          }
+                          setState(() {
+                            _authController.setLoading(false);
+                          });
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Please enter valid information.'),
+                            ),
+                          );
                         }
                       },
-                      child: const Text("Register"),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (_authController.loading)
+                            // CircularProgressIndicator(
+                            //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            // ),
+                            const SpinKitWave(
+                              color: Colors.white,
+                              size: 25.0,),
+                          if(!_authController.loading)
+                            const Text("Sign Up"),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16.0),

@@ -1,20 +1,26 @@
 import 'dart:io';
-import 'package:fireblog/views/content_input_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../views/content_input_screen.dart';
+
 class CreateBlogProvider extends ChangeNotifier {
   late TextEditingController titleController;
+  late TextEditingController descriptionController;
   File? selectedImage;
   String? currentUserUid;
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
+  double uploadProgress = 0.0;
+  Stream<double> uploadProgressStream = const Stream.empty();
 
   CreateBlogProvider() {
     titleController = TextEditingController();
+    descriptionController = TextEditingController();
     selectedImage = null; // Initialize with null value
     _getCurrentUserUid();
   }
@@ -22,6 +28,7 @@ class CreateBlogProvider extends ChangeNotifier {
   @override
   void dispose() {
     titleController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -35,7 +42,7 @@ class CreateBlogProvider extends ChangeNotifier {
   Future<void> getImageFromGallery() async {
     final pickedImage = await picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: 80,
+      imageQuality: 50,
     );
     if (pickedImage != null) {
       selectedImage = File(pickedImage.path);
@@ -54,7 +61,19 @@ class CreateBlogProvider extends ChangeNotifier {
           .child('blog_images')
           .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
 
-      final uploadTask = storageRef.putFile(selectedImage!);
+      final uploadTask = storageRef.putFile(
+        selectedImage!,
+        // Add listener to track upload progress
+        SettableMetadata(
+          contentType: 'image/jpeg',
+        ),
+      );
+
+      // Get the upload progress stream
+      uploadProgressStream = uploadTask.snapshotEvents.map(
+            (TaskSnapshot snapshot) => snapshot.bytesTransferred / snapshot.totalBytes,
+      );
+
       final taskSnapshot = await uploadTask.whenComplete(() {});
 
       if (taskSnapshot.state == TaskState.success) {
@@ -78,13 +97,34 @@ class CreateBlogProvider extends ChangeNotifier {
       // Form validation failed
       return;
     }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const Dialog(
+          child: Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SpinKitWave(color: Colors.brown, size: 32.0),
+                SizedBox(height: 16.0),
+                Text('Creating Blog Post...'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
 
     final title = titleController.text.trim();
+    final description = descriptionController.text.trim();
 
     final imageUrl = await uploadImageToFirebase();
 
     final blogPost = {
       'title': title,
+      'description': description,
       'authorUid': currentUserUid,
       'imageUrl': imageUrl,
     };
@@ -95,6 +135,7 @@ class CreateBlogProvider extends ChangeNotifier {
       final blogId = docRef.id.toString();
 
       // Blog post created successfully, navigate to ContentInput with blogId
+      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ContentInput(blogId: blogId)),

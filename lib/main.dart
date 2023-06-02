@@ -1,4 +1,5 @@
 import 'package:fireblog/views/bottom_navigation.dart';
+import 'package:fireblog/views/profile_screen.dart';
 import 'package:fireblog/views/registration_screen.dart';
 import 'package:fireblog/views/onboarding_screen.dart';
 import 'package:fireblog/views/social_media_screen.dart';
@@ -8,10 +9,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'controllers/auth_controller..dart';
+
+import 'controllers/socials_media_controller.dart';
 import 'controllers/user_data.dart';
 import 'firebase_options.dart';
 import 'package:device_preview/device_preview.dart';
 
+import 'views/blogs_screen.dart';
+import 'views/create_blog_screen.dart';
 import 'views/login_screen.dart';
 
 Future<void> main() async {
@@ -30,9 +35,16 @@ Future<void> main() async {
           ChangeNotifierProvider<UserData>(
             create: (context) => UserData(),
           ),
+          ChangeNotifierProvider<SocialMediaData>(
+            create: (context) => SocialMediaData(),
+          ),
+          ChangeNotifierProvider<BlogProvider>(
+            create: (context) => BlogProvider(),
+          ),
         ],
-        child: MyApp(),
+        child: const MyApp(),
       ),
+
     ),
   );
 }
@@ -62,7 +74,13 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const Login(),
         '/registration': (context) => const Registration(),
-        '/social_media_links': (context) => const SocialMediaInput(),
+        '/social_media_links': (context) => SocialMediaInput(),
+        '/home': (context) => const HomeScreen(),
+        '/onboarding': (context) => const OnBoardingPage(),
+        '/view_profile': (context) => const ProfileScreen(),
+        '/create_blog': (context) => const CreateBlog(),
+        // '/content_input': (context,) => const ContentInput(),
+
       },
     );
   }

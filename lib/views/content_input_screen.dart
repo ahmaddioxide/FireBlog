@@ -1,3 +1,4 @@
+import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:fireblog/views/view_blog_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
@@ -40,12 +41,8 @@ class _ContentInputState extends State<ContentInput> {
             .collection('blogPosts')
             .doc(widget.blogId)
             .update({'content': content}).then((value) {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ViewBlog(
-                        blogId: widget.blogId,
-                      )));
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
         });
         // Content saved successfully
         _showSnackBar('Content saved successfully');

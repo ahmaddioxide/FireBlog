@@ -1,15 +1,144 @@
-import 'package:fireblog/views/create_blog_screen.dart';
+import 'package:fireblog/views/view_blog_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import 'create_blog_screen.dart';
+
+class BlogProvider extends ChangeNotifier {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Stream<QuerySnapshot> getBlogPosts() {
+    return _firestore.collection('blogPosts').snapshots();
+  }
+
+  Future<DocumentSnapshot?> getUser(String? authorId) {
+    if (authorId == null || authorId.isEmpty) {
+      return Future.value(null);
+    }
+
+    return _firestore.collection('users').doc(authorId).get();
+  }
+}
 
 class BlogScreen extends StatelessWidget {
   const BlogScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final blogProvider = Provider.of<BlogProvider>(context);
 
-      body: Center(
-        child: const Text('Blog Screen'),
+    return Scaffold(
+      body: StreamBuilder<QuerySnapshot>(
+        stream: blogProvider.getBlogPosts(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Text('Error');
+          }
+
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          }
+
+          final blogs = snapshot.data?.docs;
+
+          return ListView.builder(
+            itemCount: blogs?.length,
+            itemBuilder: (context, index) {
+              final blog = blogs?[index].data() as Map<String, dynamic>?;
+
+              final blogId = blogs?[index].id;
+              final title = blog?['title'];
+              final authorId = blog?['authorUId'];
+              final imageUrl = blog?['imageUrl'];
+              final description = blog?['description'];
+              print("Image: $imageUrl");
+
+              return FutureBuilder<DocumentSnapshot?>(
+                future: blogProvider.getUser(authorId),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  }
+
+                  final authorName = snapshot.data?.toString();
+
+                  return GestureDetector(
+                    onTap: () {
+                      if (blogId != null) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ViewBlog(
+                            blogId: blogId,
+                          ),
+                        ));
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Error'),
+                          ),
+                        );
+                      }
+                    },
+                    child: Card(
+                      margin: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        children: [
+                          imageUrl == null
+                              ? const SizedBox()
+                              : CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                            height: 200,
+                            width: double.infinity,
+                            placeholder: (context, url) =>  const SpinKitWave(
+                              color: Colors.brown,
+                              size: 50.0,
+                            ),
+                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                          ),
+                          Positioned.fill(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  title ?? '',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 8.0,
+                            left: 8.0,
+                            right: 8.0,
+                            child: Text(
+                              description ?? '',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                              textAlign: TextAlign.center,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 3,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
@@ -26,4 +155,3 @@ class BlogScreen extends StatelessWidget {
     );
   }
 }
-
