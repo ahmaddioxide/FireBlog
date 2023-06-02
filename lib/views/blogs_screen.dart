@@ -51,91 +51,85 @@ class BlogScreen extends StatelessWidget {
 
               final blogId = blogs?[index].id;
               final title = blog?['title'];
-              final authorId = blog?['authorUId'];
+              final authorId = blog?['authorUid'];
               final imageUrl = blog?['imageUrl'];
               final description = blog?['description'];
               print("Image: $imageUrl");
-
-              return FutureBuilder<DocumentSnapshot?>(
-                future: blogProvider.getUser(authorId),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+              return GestureDetector(
+                onTap: () {
+                  if (blogId != null) {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ViewBlog(
+                        blogId: blogId,
+                        authorId: authorId,
+                        title: title,
+                        description: description,
+                      ),
+                    ));
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Error'),
+                      ),
+                    );
                   }
-
-                  final authorName = snapshot.data?.toString();
-
-                  return GestureDetector(
-                    onTap: () {
-                      if (blogId != null) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ViewBlog(
-                            blogId: blogId,
-                          ),
-                        ));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Error'),
-                          ),
-                        );
-                      }
-                    },
-                    child: Card(
-                      margin: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        children: [
-                          imageUrl == null
-                              ? const SizedBox()
-                              : CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            fit: BoxFit.cover,
-                            height: 200,
-                            width: double.infinity,
-                            placeholder: (context, url) =>  const SpinKitWave(
-                              color: Colors.brown,
-                              size: 50.0,
-                            ),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                          ),
-                          Positioned.fill(
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  title ?? '',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 8.0,
-                            left: 8.0,
-                            right: 8.0,
+                },
+                child: Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: Stack(
+                    children: [
+                      imageUrl == null
+                          ? const SizedBox()
+                          : CachedNetworkImage(
+                        imageUrl: imageUrl,
+                        fit: BoxFit.cover,
+                        height: 200,
+                        width: double.infinity,
+                        placeholder: (context, url) =>
+                        const SpinKitWave(
+                          color: Colors.brown,
+                          size: 50.0,
+                        ),
+                        errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
+                      ),
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(
-                              description ?? '',
+                              title ?? '',
                               style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 16,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
                               ),
                               textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                      Positioned(
+                        bottom: 8.0,
+                        left: 8.0,
+                        right: 8.0,
+                        child: Text(
+                          description ?? '',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
+
             },
           );
         },
