@@ -1,5 +1,6 @@
+import 'package:fireblog/views/view_blog_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ContentInput extends StatefulWidget {
@@ -16,11 +17,13 @@ class ContentInput extends StatefulWidget {
 
 class _ContentInputState extends State<ContentInput> {
   final FocusNode _focusNode = FocusNode();
-  QuillController _controller = QuillController.basic();
+  quill.QuillController _controller = quill.QuillController.basic();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   void initState() {
     super.initState();
-    _controller = QuillController.basic();
+    _controller = quill.QuillController.basic();
   }
 
   @override
@@ -36,65 +39,76 @@ class _ContentInputState extends State<ContentInput> {
         await FirebaseFirestore.instance
             .collection('blogPosts')
             .doc(widget.blogId)
-            .update({'content': content});
+            .update({'content': content}).then((value) {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ViewBlog(
+                        blogId: widget.blogId,
+                      )));
+        });
         // Content saved successfully
-        // You can navigate to another screen or perform other actions
+        _showSnackBar('Content saved successfully');
       } catch (e) {
         // Error occurred while saving the content
+        _showSnackBar('Error saving content');
         print('Error saving content: $e');
       }
     }
   }
 
+  void _showSnackBar(String message) {
+    final snackBar = SnackBar(content: Text(message));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(top: 20,left: 10,right: 10,bottom: 20),
-              width: MediaQuery.of(context).size.width,
-              height: 80,
-              decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: NetworkImage('https://user-images.githubusercontent.com/10923085/119221946-2de89000-baf2-11eb-8285-68168a78c658.png'),
-                      fit: BoxFit.cover
-                  )
+      key: _scaffoldKey,
+      body: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: constraints.maxHeight,
               ),
-            ),
-            Padding(padding: const EdgeInsets.only(top: 0),
-              child:
-              QuillToolbar.basic(controller: _controller,
-                fontSizeValues:  const {'Small': '7', 'Medium': '20.5', 'Large': '40'},
-                showAlignmentButtons: false ,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height,
-                width: MediaQuery.of(context).size.width,
-                decoration: const BoxDecoration(
-                    boxShadow: [BoxShadow(
-                        color: Colors.lightBlueAccent,
-                        offset: Offset(5.0, 5.0)    ,
-                        blurRadius: 10.0,
-                        spreadRadius: 2.0
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 15),
+                    quill.QuillToolbar.basic(
+                      controller: _controller,
+                      fontSizeValues: const {
+                        'Small': '7',
+                        'Medium': '20.5',
+                        'Large': '40'
+                      },
+                      showAlignmentButtons: false,
                     ),
-                      BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(0.0, 0.0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0
-                      )
-                    ]
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        width: MediaQuery.of(context).size.width,
+                        child: quill.QuillEditor.basic(
+                            controller: _controller, readOnly: false),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      child: ElevatedButton(
+                        onPressed: _saveContent,
+                        child: const Text('Save Content'),
+                      ),
+                    ),
+                  ],
                 ),
-                child:
-                QuillEditor.basic(controller: _controller, readOnly: false),),
-            )
-          ],
-        ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
