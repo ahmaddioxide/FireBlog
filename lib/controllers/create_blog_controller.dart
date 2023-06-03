@@ -147,7 +147,7 @@ class CreateBlogProvider extends ChangeNotifier {
       final String blogId = blogRef.id;
       // Blog post created successfully, navigate to ContentInput with blogId
       Navigator.pop(context);
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ContentInput(blogId: blogId)),
       );

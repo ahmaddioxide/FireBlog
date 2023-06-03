@@ -47,6 +47,7 @@ class _CreateBlogFormState extends State<CreateBlogForm> {
     });
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Create Blog'),
       ),

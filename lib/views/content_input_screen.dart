@@ -34,22 +34,20 @@ class _ContentInputState extends State<ContentInput> {
 
   Future<void> _saveContent() async {
     final content = _controller.document.toDelta().toJson();
-    if (content != null) {
-      try {
-        await FirebaseFirestore.instance
-            .collection('blogPosts')
-            .doc(widget.blogId)
-            .update({'content': content}).then((value) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        });
-        // Content saved successfully
-        _showSnackBar('Content saved successfully');
-      } catch (e) {
-        // Error occurred while saving the content
-        _showSnackBar('Error saving content');
-        print('Error saving content: $e');
-      }
+    try {
+      await FirebaseFirestore.instance
+          .collection('blogPosts')
+          .doc(widget.blogId)
+          .update({'content': content}).then((value) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen(),),);
+      });
+      // Content saved successfully
+      _showSnackBar('Content saved successfully');
+    } catch (e) {
+      // Error occurred while saving the content
+      _showSnackBar('Error saving content');
+      print('Error saving content: $e');
     }
   }
 

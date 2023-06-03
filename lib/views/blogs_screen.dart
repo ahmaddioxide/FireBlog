@@ -75,16 +75,14 @@ class BlogScreen extends StatelessWidget {
                     child: Stack(
                       children: [
                         imageUrl == null
-                            ? const SizedBox(
+                            ?  Container(
                           height: 200,
-                          child: Center(
-                            child: Icon(
-                              Icons.photo,
-                              color: Colors.red,
-                            ),
-                          ),
-                        )
-                            : CachedNetworkImage(
+                      decoration: BoxDecoration(
+                        color: Colors.brown[200],
+                        borderRadius: BorderRadius.circular(8.0),
+
+                      ),
+                    ) : CachedNetworkImage(
                           imageUrl: imageUrl,
                           fit: BoxFit.cover,
                           height: 200,
@@ -158,7 +156,7 @@ class BlogScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const CreateBlog(),
