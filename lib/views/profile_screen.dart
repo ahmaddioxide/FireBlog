@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-// import '../controllers/auth_controller.dart';
 import '../controllers/auth_controller..dart';
-import '../controllers/user_data.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    UserData userData = Provider.of<UserData>(context);
     AuthController authController = Provider.of<AuthController>(context);
 
     User? currentUser = FirebaseAuth.instance.currentUser;
@@ -23,7 +20,10 @@ class ProfileScreen extends StatelessWidget {
         future: FirebaseFirestore.instance.collection('users').doc(uid).get(),
         builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const SpinKitWave(
+              color: Colors.brown,
+              size: 50.0,
+            );
           }
 
           if (snapshot.hasError) {
@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
           }
 
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Text('No data found');
+            return const Text('No data found');
           }
 
           Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
@@ -42,106 +42,130 @@ class ProfileScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16.0),
-                Text(
+                const Text(
                   'Name:',
                   style: TextStyle(
+                    color: Colors.brown,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   userData['name'] ?? 'N/A',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Text(
+                const Text(
                   'Email:',
                   style: TextStyle(
+                    color: Colors.brown,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   userData['email'] ?? 'N/A',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 8.0),
+                const Text(
+                  'Blogs Published:',
+                  style: TextStyle(
+                    color: Colors.brown,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 Text(
+                  // userData['blogsPublished'].toString() ?? "0",
+                  userData['blogsPublished']?.toString() ?? '0',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 8.0),
+                const Text(
                   'LinkedIn Profile:',
                   style: TextStyle(
+                    color: Colors.brown,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   userData['linkedin'] ?? 'N/A',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Text(
+                const Text(
                   'Facebook Profile:',
                   style: TextStyle(
+                    color: Colors.brown,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   userData['facebook'] ?? 'N/A',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Text(
+                const Text(
                   'Instagram Profile:',
                   style: TextStyle(
+                    color: Colors.brown,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   userData['instagram'] ?? 'N/A',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
                 const SizedBox(height: 8.0),
-                Text(
+                const Text(
                   'Twitter Profile:',
                   style: TextStyle(
+                    color: Colors.brown,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 Text(
                   userData['twitterProfile'] ?? 'N/A',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: () {
-                    authController.logout(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      authController.logout(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.brown,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 16,
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),

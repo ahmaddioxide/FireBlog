@@ -1,5 +1,4 @@
 import 'package:fireblog/views/bottom_navigation.dart';
-import 'package:fireblog/views/view_blog_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -17,7 +16,7 @@ class ContentInput extends StatefulWidget {
 }
 
 class _ContentInputState extends State<ContentInput> {
-  final FocusNode _focusNode = FocusNode();
+  // final FocusNode _focusNode = FocusNode();
   quill.QuillController _controller = quill.QuillController.basic();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -29,12 +28,12 @@ class _ContentInputState extends State<ContentInput> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   Future<void> _saveContent() async {
-    final content = _controller?.document.toDelta().toJson();
+    final content = _controller.document.toDelta().toJson();
     if (content != null) {
       try {
         await FirebaseFirestore.instance
@@ -86,7 +85,7 @@ class _ContentInputState extends State<ContentInput> {
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Container(
+                      child: SizedBox(
                         height: MediaQuery.of(context).size.height * 0.7,
                         width: MediaQuery.of(context).size.width,
                         child: quill.QuillEditor.basic(

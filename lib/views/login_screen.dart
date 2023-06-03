@@ -12,9 +12,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  AuthController _authController = AuthController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthController _authController = AuthController();
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -49,7 +49,21 @@ class _LoginState extends State<Login> {
                       prefixIcon: Icon(Icons.email),
                     ),
                     validator: (value) {
-                      // Validation logic
+                      if (value!.isEmpty) {
+                        return "Email is required";
+                      }
+                      else if (!value.contains("@")) {
+                        return "Invalid email";
+                      }
+                      else if (!value.contains(".")) {
+                        return "Invalid email";
+                      }
+                      else if (value.contains(" ")) {
+                        return "Invalid email";
+                      }
+                      else {
+                        return null;
+                      }
                     },
                   ),
                   const SizedBox(height: 16.0),
@@ -74,7 +88,15 @@ class _LoginState extends State<Login> {
                       ),
                     ),
                     validator: (value) {
-                      // Validation logic
+                      if (value!.isEmpty) {
+                        return "Password is required";
+                      }
+                      else if (value.length < 6) {
+                        return "Password must be at least 6 characters";
+                      }
+                      else {
+                        return null;
+                      }
                     },
                   ),
                   const SizedBox(height: 24.0),

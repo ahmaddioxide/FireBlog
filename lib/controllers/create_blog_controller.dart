@@ -130,10 +130,21 @@ class CreateBlogProvider extends ChangeNotifier {
     };
 
     try {
-      final DocumentReference docRef =
-      await FirebaseFirestore.instance.collection('blogPosts').add(blogPost);
-      final blogId = docRef.id.toString();
+      final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .get();
 
+      final int currentBlogsPublished = (userSnapshot.data() as Map<String, dynamic>?)?['blogsPublished'] ?? 0;
+      final int updatedBlogsPublished = currentBlogsPublished + 1;
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUserUid)
+          .update({'blogsPublished': updatedBlogsPublished});
+
+      final DocumentReference blogRef = await FirebaseFirestore.instance.collection('blogPosts').add(blogPost);
+      final String blogId = blogRef.id;
       // Blog post created successfully, navigate to ContentInput with blogId
       Navigator.pop(context);
       Navigator.push(

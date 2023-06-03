@@ -13,14 +13,6 @@ class BlogProvider extends ChangeNotifier {
   Stream<QuerySnapshot> getBlogPosts() {
     return _firestore.collection('blogPosts').snapshots();
   }
-
-  Future<DocumentSnapshot?> getUser(String? authorId) {
-    if (authorId == null || authorId.isEmpty) {
-      return Future.value(null);
-    }
-
-    return _firestore.collection('users').doc(authorId).get();
-  }
 }
 
 class BlogScreen extends StatelessWidget {
@@ -54,7 +46,8 @@ class BlogScreen extends StatelessWidget {
               final authorId = blog?['authorUid'];
               final imageUrl = blog?['imageUrl'];
               final description = blog?['description'];
-              print("Image: $imageUrl");
+              final likes = blog?['likes'] ?? 0; // Retrieve the number of likes
+
               return GestureDetector(
                 onTap: () {
                   if (blogId != null) {
@@ -74,69 +67,98 @@ class BlogScreen extends StatelessWidget {
                     );
                   }
                 },
-                child: Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: Stack(
-                    children: [
-                      imageUrl == null
-                          ? const SizedBox()
-                          : CachedNetworkImage(
-                        imageUrl: imageUrl,
-                        fit: BoxFit.cover,
-                        height: 200,
-                        width: double.infinity,
-                        placeholder: (context, url) =>
-                        const SpinKitWave(
-                          color: Colors.brown,
-                          size: 50.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(40),
+                  child: Card(
+                    elevation: 10,
+                    margin: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: [
+                        imageUrl == null
+                            ? const SizedBox(
+                          height: 200,
+                          child: Center(
+                            child: Icon(
+                              Icons.photo,
+                              color: Colors.red,
+                            ),
+                          ),
+                        )
+                            : CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          fit: BoxFit.cover,
+                          height: 200,
+                          width: double.infinity,
+                          placeholder: (context, url) =>
+                          const SpinKitWave(
+                            color: Colors.brown,
+                            size: 50.0,
+                          ),
+                          errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                         ),
-                        errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                      ),
-                      Positioned.fill(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              title ?? '',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
+                        Positioned.fill(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                title ?? '',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                              textAlign: TextAlign.center,
                             ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: 8.0,
-                        left: 8.0,
-                        right: 8.0,
-                        child: Text(
-                          description ?? '',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                        Positioned(
+                          bottom: 8.0,
+                          left: 8.0,
+                          right: 8.0,
+                          child: Text(
+                            description ?? '',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
                           ),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
                         ),
-                      ),
-                    ],
+                        Positioned(
+                          top: 8.0,
+                          right: 8.0,
+                          child: Container(
+                            padding: const EdgeInsets.all(6.0),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Text(
+                              'Likes: $likes',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
-
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => const CreateBlog(),

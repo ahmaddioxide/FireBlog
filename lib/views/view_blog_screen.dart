@@ -3,6 +3,8 @@ import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import 'blog_info_screen.dart';
+
 class ViewBlog extends StatefulWidget {
   final String blogId;
   final String authorId;
@@ -26,9 +28,6 @@ class ViewBlog extends StatefulWidget {
 
 class _ViewBlogState extends State<ViewBlog> {
   quill.QuillController _controller = quill.QuillController.basic();
-  final FocusNode _focusNode = FocusNode();
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  late String _authorName;
 
   Future<String> getAuthorName() async {
     String? name;
@@ -51,7 +50,7 @@ class _ViewBlogState extends State<ViewBlog> {
 
   @override
   void dispose() {
-    _controller?.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -78,54 +77,80 @@ class _ViewBlogState extends State<ViewBlog> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('View Blog'),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(Icons.info_outline_rounded, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BlogInfo(
+                      blogId: widget.blogId,
+                      authorId: widget.authorId,
+                      title: widget.title,
+                      description: widget.description,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: _controller != null
           ? Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    widget.title!,
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  FutureBuilder(builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Text(
-                        'By ${snapshot.data}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      );
-                    } else {
-                      return const Center(
-                        child: SpinKitWave(
-                          color: Colors.brown,
-                          size: 20.0,
-                        ),
-                      );
-                    }
-                  }, future: getAuthorName()),
-                  const SizedBox(height: 10),
-                  quill.QuillEditor.basic(
-                      controller: _controller, readOnly: true),
-                ],
-              ),
-            )
-          : const Center(
-              child: SpinKitWave(
-                color: Colors.brown,
-                size: 50.0,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              widget.title,
+              style: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
+            FutureBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    'By ${snapshot.data}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+              future: getAuthorName(),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: quill.QuillEditor.basic(
+                controller: _controller,
+                readOnly: true,
+              ),
+            ),
+          ],
+        ),
+      )
+          : const Center(
+        child: SpinKitWave(
+          color: Colors.brown,
+          size: 50.0,
+        ),
+      ),
     );
   }
 }

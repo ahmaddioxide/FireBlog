@@ -1,3 +1,4 @@
+import 'package:fireblog/controllers/blog_info_controller.dart';
 import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:fireblog/views/profile_screen.dart';
 import 'package:fireblog/views/registration_screen.dart';
@@ -41,6 +42,7 @@ Future<void> main() async {
           ChangeNotifierProvider<BlogProvider>(
             create: (context) => BlogProvider(),
           ),
+          ChangeNotifierProvider<BlogInfoProvider>(create: (context) => BlogInfoProvider()),
         ],
         child: const MyApp(),
       ),
@@ -74,12 +76,11 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login': (context) => const Login(),
         '/registration': (context) => const Registration(),
-        '/social_media_links': (context) => SocialMediaInput(),
+        '/social_media_links': (context) => const SocialMediaInput(),
         '/home': (context) => const HomeScreen(),
         '/onboarding': (context) => const OnBoardingPage(),
         '/view_profile': (context) => const ProfileScreen(),
         '/create_blog': (context) => const CreateBlog(),
-        // '/content_input': (context,) => const ContentInput(),
 
       },
     );

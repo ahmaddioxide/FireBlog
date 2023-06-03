@@ -42,7 +42,7 @@ class AuthController with ChangeNotifier {
       showSnackBar(context, 'Sign up successful!', Colors.green);
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SocialMediaInput()),
+        MaterialPageRoute(builder: (context) => const SocialMediaInput()),
       );
     } catch (error) {
       print('Error during sign up: $error');
@@ -99,7 +99,7 @@ class AuthController with ChangeNotifier {
       // Navigate to the home screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen()),
       );
     } catch (error) {
       // Error handling code remains the same
