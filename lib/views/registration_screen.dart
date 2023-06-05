@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../controllers/auth_controller..dart';
 import 'login_screen.dart';
@@ -47,6 +48,7 @@ class _RegistrationState extends State<Registration> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                   Image(image: const AssetImage('assets/images/signupIllustration.png'), height: MediaQuery.of(context).size.height * 0.23),
                   TextFormField(
                     controller: _nameController,
                     decoration: const InputDecoration(
@@ -211,16 +213,17 @@ class _RegistrationState extends State<Registration> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const Login(),
-                        ),
-                      );
-                    },
-                    child: const Text("Already have an account? Log in"),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Already have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, "/login");
+                        },
+                        child: const Text("Login"),
+                      ),
+                    ],
                   ),
                 ],
               ),

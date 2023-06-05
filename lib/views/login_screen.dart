@@ -41,6 +41,8 @@ class _LoginState extends State<Login> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Image(image: const AssetImage('assets/images/loginIllustration.png'), height: MediaQuery.of(context).size.height * 0.33),
+
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(
@@ -96,6 +98,7 @@ class _LoginState extends State<Login> {
                   const SizedBox(height: 24.0),
                   SizedBox(
                     width: double.infinity,
+                    height: 50,
                     child: ElevatedButton(
                       onPressed: _isLoading
                           ? null
@@ -125,6 +128,19 @@ class _LoginState extends State<Login> {
                             )
                           : const Text("Login"),
                     ),
+                  ),
+                  const SizedBox(height: 12.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text("Don't have an account?"),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, "/registration");
+                        },
+                        child: const Text("Register"),
+                      ),
+                    ],
                   ),
                 ],
               ),

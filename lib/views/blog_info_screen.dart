@@ -168,7 +168,7 @@ class BlogInfo extends StatelessWidget {
                   children: [
                     const Text(
                       'Like this blog?',
-                      style: const TextStyle(
+                      style:  TextStyle(
                         fontSize: 18,
                       ),
                     ),
