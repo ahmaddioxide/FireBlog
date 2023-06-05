@@ -33,6 +33,29 @@ FireBlog is a user-friendly Flutter app for creating and reading blogs, featurin
 
   - As a user, I want to see the number of blogs published by other users to gain insights into their activity and contributions.
 
+## Mockup
+
+| Onboarding Screen | Onboarding Screen 2 | Onboarding Screen 3 |
+| --- | --- | --- |
+| ![Onboarding Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/59218ad1-1878-42db-b8cb-08b6b61cee04) | ![Onboarding Screen 2](https://github.com/ahmaddioxide/FireBlog/assets/75989502/fa732679-6ab5-4aef-8539-cf53bb2ce071) | ![Onboarding Screen 3](https://github.com/ahmaddioxide/FireBlog/assets/75989502/c17a17c6-52df-4a32-8946-c62c054f3e8b) |
+
+| Signup Empty | Signing Up | Blog Home Screen Loading |
+| --- | --- | --- |
+| ![Signup Empty](https://github.com/ahmaddioxide/FireBlog/assets/75989502/b5318134-2864-4a43-8ee2-fb141bcafd57) | ![Signing Up](https://github.com/ahmaddioxide/FireBlog/assets/75989502/daec91c1-ef8f-434b-8a62-5b474383e394) | ![Blog Home Screen Loading](https://github.com/ahmaddioxide/FireBlog/assets/75989502/eacba921-f3bc-4fe4-adcb-20b38310e23a) |
+
+| Blog Screen | Screenshot 1685979652 | Blog Reading Screen |
+| --- | --- | --- |
+| ![Blog Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/4f22d63c-ec38-49ab-8604-d7198aec3525) | ![Screenshot 1685979652](https://github.com/ahmaddioxide/FireBlog/assets/75989502/74b00ad2-e355-446c-96c7-f9c83c5060dc) | ![Blog Reading Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/439551e2-002e-4e30-82b4-1226f651db30) |
+
+| Blog Info Screen | Liked Blog | Create Blog Screen |
+| --- | --- | --- |
+| ![Blog Info Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/8c53bc79-17ac-4e05-8486-cb9997a9ada9) | ![Liked Blog](https://github.com/ahmaddioxide/FireBlog/assets/75989502/297fe2e4-ca96-42d8-91a7-30def1f047f7) | ![Create Blog Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/79e72c39-fdc0-453f-b122-d361bf2bc4c7) |
+
+| Image Selected Screen | Image Uploading Screen | Login Screen |
+| --- | --- | --- |
+| ![Image Selected Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/6c027e1f-5173-43e4-bb51-272b1863e2bf) | ![Image Uploading Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/343237d5-dcb7-4263-ad0c-866f3585eb99) | ![Login Screen](https://github.com/ahmaddioxide/FireBlog/assets/75989502/147bfc63-e3d4-458b-8626-e216f630f532) |
+
+
 
 
 ## Technologies Used
