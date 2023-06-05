@@ -1,7 +1,7 @@
-import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fireblog/views/bottom_navigation.dart';
 
 class ContentInput extends StatefulWidget {
   final String blogId;
@@ -16,7 +16,6 @@ class ContentInput extends StatefulWidget {
 }
 
 class _ContentInputState extends State<ContentInput> {
-  // final FocusNode _focusNode = FocusNode();
   quill.QuillController _controller = quill.QuillController.basic();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -39,20 +38,26 @@ class _ContentInputState extends State<ContentInput> {
           .collection('blogPosts')
           .doc(widget.blogId)
           .update({'content': content}).then((value) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const HomeScreen(),),);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
+      }, onError: (e) {
+        print('Error saving content: $e');
       });
-      // Content saved successfully
       _showSnackBar('Content saved successfully');
     } catch (e) {
-      // Error occurred while saving the content
       _showSnackBar('Error saving content');
       print('Error saving content: $e');
     }
   }
 
   void _showSnackBar(String message) {
-    final snackBar = SnackBar(content: Text(message));
+    final snackBar = SnackBar(
+      content: Text(message),
+    );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -94,7 +99,7 @@ class _ContentInputState extends State<ContentInput> {
                     SizedBox(
                       child: ElevatedButton(
                         onPressed: _saveContent,
-                        child: const Text('Save Content'),
+                        child: const Text('Save this Blog'),
                       ),
                     ),
                   ],

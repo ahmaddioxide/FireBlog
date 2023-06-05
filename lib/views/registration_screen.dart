@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../controllers/auth_controller..dart';
+import 'login_screen.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
@@ -15,7 +16,8 @@ class _RegistrationState extends State<Registration> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final AuthController _authController = AuthController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -128,7 +130,8 @@ class _RegistrationState extends State<Registration> {
                         return 'Password must contain at least one lowercase letter';
                       } else if (!value.contains(RegExp(r'[0-9]'))) {
                         return 'Password must contain at least one number';
-                      } else if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+                      } else if (!value
+                          .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
                         return 'Password must contain at least one special character';
                       }
                       return null;
@@ -158,7 +161,8 @@ class _RegistrationState extends State<Registration> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'Please confirm your password';
-                      } else if (value != _passwordController.text.toString().trim()) {
+                      } else if (value !=
+                          _passwordController.text.toString().trim()) {
                         return 'Passwords do not match';
                       }
                       return null;
@@ -169,10 +173,9 @@ class _RegistrationState extends State<Registration> {
                     width: double.infinity,
                     height: 50.0,
                     child: ElevatedButton(
-
                       onPressed: () async {
-
-                        if (_formKey.currentState!.validate() && !_authController.loading) {
+                        if (_formKey.currentState!.validate() &&
+                            !_authController.loading) {
                           setState(() {
                             _authController.setLoading(true);
                           });
@@ -197,14 +200,12 @@ class _RegistrationState extends State<Registration> {
                         alignment: Alignment.center,
                         children: [
                           if (_authController.loading)
-                            // CircularProgressIndicator(
-                            //   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                            // ),
+
                             const SpinKitWave(
                               color: Colors.white,
-                              size: 25.0,),
-                          if(!_authController.loading)
-                            const Text("Sign Up"),
+                              size: 25.0,
+                            ),
+                          if (!_authController.loading) const Text("Sign Up"),
                         ],
                       ),
                     ),
@@ -212,8 +213,12 @@ class _RegistrationState extends State<Registration> {
                   const SizedBox(height: 16.0),
                   TextButton(
                     onPressed: () {
-                      // Navigate to the login screen
-                      Navigator.pushReplacementNamed(context, '/login');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const Login(),
+                        ),
+                      );
                     },
                     child: const Text("Already have an account? Log in"),
                   ),

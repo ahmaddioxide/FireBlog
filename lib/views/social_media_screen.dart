@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../controllers/socials_media_controller.dart';
@@ -24,7 +25,7 @@ class SocialMediaInput extends StatelessWidget {
               controller: socialMediaData.linkedinController,
               decoration: const InputDecoration(
                 labelText: 'LinkedIn',
-                prefixIcon:  Icon(Icons.link),
+                prefixIcon: Icon(Icons.link),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -32,15 +33,15 @@ class SocialMediaInput extends StatelessWidget {
               controller: socialMediaData.facebookController,
               decoration: const InputDecoration(
                 labelText: 'Facebook',
-                prefixIcon:  Icon(Icons.facebook_rounded),
+                prefixIcon: Icon(Icons.facebook_rounded),
               ),
             ),
             const SizedBox(height: 16.0),
             TextFormField(
               controller: socialMediaData.twitterController,
-              decoration: const  InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Twitter',
-                prefixIcon:  Icon(Icons.link_rounded),
+                prefixIcon: Icon(Icons.link_rounded),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -48,7 +49,7 @@ class SocialMediaInput extends StatelessWidget {
               controller: socialMediaData.instagramController,
               decoration: const InputDecoration(
                 labelText: 'Instagram',
-                prefixIcon:  Icon(Icons.link_rounded),
+                prefixIcon: Icon(Icons.link_rounded),
               ),
             ),
             const Spacer(),

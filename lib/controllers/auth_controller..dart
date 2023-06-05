@@ -1,17 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'user_data.dart';
 import '../views/bottom_navigation.dart';
 import '../views/social_media_screen.dart';
-import 'user_data.dart';
 
 class AuthController with ChangeNotifier {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final User? currentUser = FirebaseAuth.instance.currentUser;
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
+  User? get currentUser => _currentUser;
   bool _loading = false;
-
   bool get loading => _loading;
 
   void setLoading(bool value) {
@@ -30,19 +29,20 @@ class AuthController with ChangeNotifier {
 
       String uid = userCredential.user!.uid;
 
-      // Save user data to Firestore
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
         'name': name,
         'email': email,
       });
 
-      // Sign up successful
       final userData = UserData(name: name, email: email);
+
       Provider.of<UserData>(context, listen: false).updateUserData(userData);
+
       showSnackBar(context, 'Sign up successful!', Colors.green);
+
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const SocialMediaInput()),
+        MaterialPageRoute(builder: (context) => const SocialMediaInput(),),
       );
     } catch (error) {
       print('Error during sign up: $error');
@@ -83,26 +83,47 @@ class AuthController with ChangeNotifier {
 
       String uid = userCredential.user!.uid;
 
-      // Fetch user data from Firestore
       DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
       Map<String, dynamic> userData = userDataSnapshot.data() as Map<String, dynamic>;
 
-      // Update user data using provider
       final userDataModel = UserData(
         name: userData['name'],
         email: userData['email'],
       );
+
       Provider.of<UserData>(context, listen: false).updateUserData(userDataModel);
 
       showSnackBar(context, 'Login successful!', Colors.green);
 
-      // Navigate to the home screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
+        MaterialPageRoute(builder: (context) => const HomeScreen(),),
       );
     } catch (error) {
-      // Error handling code remains the same
+print('Error during login: $error');
+
+      String errorMessage = 'An error occurred. Please try again.';
+
+      if (error is FirebaseAuthException) {
+        switch (error.code) {
+          case 'user-not-found':
+            errorMessage = 'No user found with this email. Please try again.';
+            break;
+          case 'wrong-password':
+            errorMessage = 'Incorrect password. Please try again.';
+            break;
+          case 'invalid-email':
+            errorMessage = 'Invalid email address. Please enter a valid email.';
+            break;
+          case 'user-disabled':
+            errorMessage = 'This user has been disabled. Please contact support.';
+            break;
+        }
+      }
+
+      showSnackBar(context, errorMessage, Colors.red);
+
     } finally {
       setLoading(false);
     }
@@ -111,10 +132,16 @@ class AuthController with ChangeNotifier {
   Future<void> logout(BuildContext context) async {
     try {
       await _firebaseAuth.signOut();
-      Provider.of<UserData>(context, listen: false).updateUserData(UserData()); // Clear user data
-      Navigator.pushReplacementNamed(context, '/registration'); // Navigate back to login screen
+
+      Provider.of<UserData>(context, listen: false).updateUserData(UserData());
+
+      Navigator.pushReplacementNamed(context, '/registration');
     } catch (error) {
-      print('Error during logout: $error');
+      if(error is FirebaseAuthException)
+        {
+          showSnackBar(context, 'An error occurred. Please try again.', Colors.red);
+        }
+
     }
   }
 

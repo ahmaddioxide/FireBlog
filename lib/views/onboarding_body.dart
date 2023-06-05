@@ -57,32 +57,33 @@ class _OnboardingBodyState extends State<OnboardingBody> {
             children: <Widget>[
               Expanded(
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: height * 0.02),
-                          child: GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const Registration()));
-                              },
-                              child: const Text(
-                                'Skip',
-                                style: TextStyle(
-                                    color: Colors.brown,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 24),
-                              )),
-                        ),
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: height * 0.02),
+                        child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const Registration()));
+                            },
+                            child: const Text(
+                              'Skip',
+                              style: TextStyle(
+                                  color: Colors.brown,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 24),
+                            )),
                       ),
-                    ]),
+                    ),
+                  ],
+                ),
               ),
               Expanded(
                 flex: 5,
@@ -127,10 +128,12 @@ class _OnboardingBodyState extends State<OnboardingBody> {
                                 onTap: () {
                                   if (currentPage == onboardData.length - 1) {
                                     Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Registration()));
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const Registration(),
+                                      ),
+                                    );
                                   }
                                   _controller.nextPage(
                                     duration: const Duration(milliseconds: 200),

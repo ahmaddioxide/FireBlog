@@ -51,17 +51,13 @@ class _LoginState extends State<Login> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Email is required";
-                      }
-                      else if (!value.contains("@")) {
+                      } else if (!value.contains("@")) {
                         return "Invalid email";
-                      }
-                      else if (!value.contains(".")) {
+                      } else if (!value.contains(".")) {
                         return "Invalid email";
-                      }
-                      else if (value.contains(" ")) {
+                      } else if (value.contains(" ")) {
                         return "Invalid email";
-                      }
-                      else {
+                      } else {
                         return null;
                       }
                     },
@@ -90,11 +86,9 @@ class _LoginState extends State<Login> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return "Password is required";
-                      }
-                      else if (value.length < 6) {
+                      } else if (value.length < 6) {
                         return "Password must be at least 6 characters";
-                      }
-                      else {
+                      } else {
                         return null;
                       }
                     },
@@ -106,29 +100,29 @@ class _LoginState extends State<Login> {
                       onPressed: _isLoading
                           ? null
                           : () async {
-                        if (_formKey.currentState!.validate()) {
-                          setState(() {
-                            _isLoading = true;
-                          });
-                          await _authController.login(
-                            context,
-                            _emailController.text.toString().trim(),
-                            _passwordController.text.toString().trim(),
-                          );
-                          setState(() {
-                            _isLoading = false;
-                          });
-                        }
-                      },
+                              if (_formKey.currentState!.validate()) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                await _authController.login(
+                                  context,
+                                  _emailController.text.toString().trim(),
+                                  _passwordController.text.toString().trim(),
+                                );
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                              }
+                            },
                       child: _isLoading
                           ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: SpinKitWave(
-                          color: Colors.white,
-                          size: 10,
-                        ),
-                      )
+                              height: 20,
+                              width: 20,
+                              child: SpinKitWave(
+                                color: Colors.white,
+                                size: 10,
+                              ),
+                            )
                           : const Text("Login"),
                     ),
                   ),

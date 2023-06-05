@@ -1,6 +1,5 @@
-import 'package:fireblog/views/profile_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:fireblog/views/profile_screen.dart';
 import 'blogs_screen.dart';
 
 class HomeScreen extends StatefulWidget {

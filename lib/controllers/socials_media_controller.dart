@@ -53,7 +53,8 @@ class SocialMediaData with ChangeNotifier {
             .update(socialMediaLinks);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Social media links saved successfully')),
+          const SnackBar(
+              content: Text('Social media links saved successfully')),
         );
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -61,7 +62,12 @@ class SocialMediaData with ChangeNotifier {
         );
       } finally {
         setLoading(false);
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeScreen(),
+          ),
+        );
       }
     }
   }

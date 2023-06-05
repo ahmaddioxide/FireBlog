@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import '../views/content_input_screen.dart';
 
 class CreateBlogProvider extends ChangeNotifier {
@@ -16,12 +15,13 @@ class CreateBlogProvider extends ChangeNotifier {
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
   double uploadProgress = 0.0;
+
   Stream<double> uploadProgressStream = const Stream.empty();
 
   CreateBlogProvider() {
     titleController = TextEditingController();
     descriptionController = TextEditingController();
-    selectedImage = null; // Initialize with null value
+    selectedImage = null;
     _getCurrentUserUid();
   }
 
@@ -44,6 +44,7 @@ class CreateBlogProvider extends ChangeNotifier {
       source: ImageSource.gallery,
       imageQuality: 50,
     );
+
     if (pickedImage != null) {
       selectedImage = File(pickedImage.path);
     }
@@ -63,15 +64,14 @@ class CreateBlogProvider extends ChangeNotifier {
 
       final uploadTask = storageRef.putFile(
         selectedImage!,
-        // Add listener to track upload progress
         SettableMetadata(
           contentType: 'image/jpeg',
         ),
       );
 
-      // Get the upload progress stream
       uploadProgressStream = uploadTask.snapshotEvents.map(
-            (TaskSnapshot snapshot) => snapshot.bytesTransferred / snapshot.totalBytes,
+        (TaskSnapshot snapshot) =>
+            snapshot.bytesTransferred / snapshot.totalBytes,
       );
 
       final taskSnapshot = await uploadTask.whenComplete(() {});
@@ -81,7 +81,7 @@ class CreateBlogProvider extends ChangeNotifier {
         return imageUrl;
       }
     } catch (e) {
-      print('Error uploading image to Firebase: $e');
+      debugPrint('Error uploading image to Firebase: $e');
     }
 
     return null;
@@ -89,12 +89,10 @@ class CreateBlogProvider extends ChangeNotifier {
 
   Future<void> createBlogPost(BuildContext context) async {
     if (currentUserUid == null) {
-      // User not logged in or UID not available
       return;
     }
 
     if (!formKey.currentState!.validate()) {
-      // Form validation failed
       return;
     }
     showDialog(
@@ -109,7 +107,10 @@ class CreateBlogProvider extends ChangeNotifier {
               children: [
                 SpinKitWave(color: Colors.brown, size: 32.0),
                 SizedBox(height: 16.0),
-                Text('Creating Blog Post...'),
+                Text(
+                  'Creating Blog Post...',
+                  style: TextStyle(fontSize: 16.0, color: Colors.brown,),
+                ),
               ],
             ),
           ),
@@ -135,7 +136,9 @@ class CreateBlogProvider extends ChangeNotifier {
           .doc(currentUserUid)
           .get();
 
-      final int currentBlogsPublished = (userSnapshot.data() as Map<String, dynamic>?)?['blogsPublished'] ?? 0;
+      final int currentBlogsPublished =
+          (userSnapshot.data() as Map<String, dynamic>?)?['blogsPublished'] ??
+              0;
       final int updatedBlogsPublished = currentBlogsPublished + 1;
 
       await FirebaseFirestore.instance
@@ -143,17 +146,20 @@ class CreateBlogProvider extends ChangeNotifier {
           .doc(currentUserUid)
           .update({'blogsPublished': updatedBlogsPublished});
 
-      final DocumentReference blogRef = await FirebaseFirestore.instance.collection('blogPosts').add(blogPost);
+      final DocumentReference blogRef = await FirebaseFirestore.instance
+          .collection('blogPosts')
+          .add(blogPost);
       final String blogId = blogRef.id;
-      // Blog post created successfully, navigate to ContentInput with blogId
+
       Navigator.pop(context);
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ContentInput(blogId: blogId)),
       );
     } catch (e) {
       // Error occurred while creating the blog post
-      print('Error creating blog post: $e');
+      debugPrint('Error creating blog post: $e');
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -17,26 +18,24 @@ class ViewBlog extends StatefulWidget {
     required this.authorId,
     required this.title,
     required this.description,
-
   }) : super(key: key);
 
   @override
   State<ViewBlog> createState() => _ViewBlogState();
-
 }
-
 
 class _ViewBlogState extends State<ViewBlog> {
   quill.QuillController _controller = quill.QuillController.basic();
 
   Future<String> getAuthorName() async {
     String? name;
-      await FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection('users')
         .doc(widget.authorId)
-        .get().then((value) {
-          name=value.data()?['name'].toString();
-        });
+        .get()
+        .then((value) {
+      name = value.data()?['name'].toString();
+    });
     return name!;
   }
 
@@ -106,51 +105,51 @@ class _ViewBlogState extends State<ViewBlog> {
       ),
       body: _controller != null
           ? Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Text(
-              widget.title,
-              style: const TextStyle(
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            FutureBuilder(
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  return Text(
-                    'By ${snapshot.data}',
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Text(
+                    widget.title,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-              future: getAuthorName(),
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: quill.QuillEditor.basic(
-                controller: _controller,
-                readOnly: true,
+                  ),
+                  const SizedBox(height: 10),
+                  FutureBuilder(
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Text(
+                          'By ${snapshot.data}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        );
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    },
+                    future: getAuthorName(),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: quill.QuillEditor.basic(
+                      controller: _controller,
+                      readOnly: true,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : const Center(
+              child: SpinKitWave(
+                color: Colors.brown,
+                size: 50.0,
               ),
             ),
-          ],
-        ),
-      )
-          : const Center(
-        child: SpinKitWave(
-          color: Colors.brown,
-          size: 50.0,
-        ),
-      ),
     );
   }
 }

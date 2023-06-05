@@ -1,10 +1,11 @@
-import 'package:fireblog/views/view_blog_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'package:fireblog/views/view_blog_screen.dart';
 import 'create_blog_screen.dart';
 
 class BlogProvider extends ChangeNotifier {
@@ -75,26 +76,26 @@ class BlogScreen extends StatelessWidget {
                     child: Stack(
                       children: [
                         imageUrl == null
-                            ?  Container(
-                          height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.brown[200],
-                        borderRadius: BorderRadius.circular(8.0),
-
-                      ),
-                    ) : CachedNetworkImage(
-                          imageUrl: imageUrl,
-                          fit: BoxFit.cover,
-                          height: 200,
-                          width: double.infinity,
-                          placeholder: (context, url) =>
-                          const SpinKitWave(
-                            color: Colors.brown,
-                            size: 50.0,
-                          ),
-                          errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                        ),
+                            ? Container(
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.brown[200],
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              )
+                            : CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                height: 200,
+                                width: double.infinity,
+                                placeholder: (context, url) =>
+                                    const SpinKitWave(
+                                  color: Colors.brown,
+                                  size: 50.0,
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
+                              ),
                         Positioned.fill(
                           child: Align(
                             alignment: Alignment.center,

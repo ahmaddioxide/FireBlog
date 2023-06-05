@@ -1,7 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../controllers/blog_info_controller.dart';
 
@@ -178,7 +178,8 @@ class BlogInfo extends StatelessWidget {
                       },
                     ),
                     IconButton(
-                      onPressed: () => blogInfoProvider.updateLikeCount(blogId!),
+                      onPressed: () =>
+                          blogInfoProvider.updateLikeCount(blogId!),
                       icon: Consumer<BlogInfoProvider>(
                         builder: (context, blogProvider, _) {
                           return Icon(

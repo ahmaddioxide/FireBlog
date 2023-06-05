@@ -144,10 +144,7 @@ class _CreateBlogFormState extends State<CreateBlogForm> {
               const Spacer(),
               ElevatedButton(
                 onPressed: () async {
-
-
-                   provider.createBlogPost(context);
-
+                  provider.createBlogPost(context);
 
                   // Perform any additional actions
                 },

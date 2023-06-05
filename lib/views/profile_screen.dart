@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../controllers/auth_controller..dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -18,7 +20,8 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: FutureBuilder<DocumentSnapshot>(
         future: FirebaseFirestore.instance.collection('users').doc(uid).get(),
-        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        builder:
+            (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const SpinKitWave(
               color: Colors.brown,
@@ -34,7 +37,8 @@ class ProfileScreen extends StatelessWidget {
             return const Text('No data found');
           }
 
-          Map<String, dynamic> userData = snapshot.data!.data() as Map<String, dynamic>;
+          Map<String, dynamic> userData =
+              snapshot.data!.data() as Map<String, dynamic>;
 
           return Container(
             padding: const EdgeInsets.all(16.0),
@@ -160,7 +164,8 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     ),
                     child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 24.0, vertical: 12.0),
                       child: Text(
                         'Logout',
                         style: TextStyle(
