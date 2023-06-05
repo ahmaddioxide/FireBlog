@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -101,60 +102,59 @@ class BlogInfo extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16.0),
-                    const Text(
-                      'Social Links:',
-                      style: TextStyle(
+                    Text(
+                      'Social Links of Author (${userData?['name']}):',
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 16.0),
                     if (userData != null)
-                      Column(
+                      Row(
                         children: [
                           if (userData['facebook'] != null)
                             GestureDetector(
                               onTap: () => launch(userData['facebook']),
-                              child: Text(
-                                'Facebook: ${userData['facebook']}',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
+                              child: const Icon(
+                                FontAwesomeIcons.facebook,
+                                size: 50,
+                                color: Colors.brown,
                               ),
                             ),
+                          const SizedBox(width: 10.0),
                           if (userData['instagram'] != null)
                             GestureDetector(
                               onTap: () => launch(userData['instagram']),
-                              child: Text(
-                                'Instagram: ${userData['instagram']}',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
+                              child: const Icon(
+                                FontAwesomeIcons.instagram,
+                                size: 50,
+                                color: Colors.brown,
                               ),
                             ),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
                           if (userData['twitter'] != null)
                             GestureDetector(
                               onTap: () => launch(userData['twitter']),
-                              child: Text(
-                                'Twitter: ${userData['twitter']}',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
+                              child: const Icon(
+                                FontAwesomeIcons.twitter,
+                                size: 50,
+                                color: Colors.brown,
                               ),
                             ),
+                          const SizedBox(
+                            width: 10.0,
+                          ),
                           if (userData['linkedin'] != null)
                             GestureDetector(
-                              onTap: () => launch(userData['linkedin']),
-                              child: Text(
-                                'LinkedIn: ${userData['linkedin']}',
-                                style: const TextStyle(
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
-                            ),
+                                onTap: () => launch(userData['linkedin']),
+                                child: const Icon(
+                                  FontAwesomeIcons.linkedin,
+                                  size: 50,
+                                  color: Colors.brown,
+                                )),
                         ],
                       ),
                   ],
@@ -166,16 +166,11 @@ class BlogInfo extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Consumer<BlogInfoProvider>(
-                      builder: (context, blogProvider, _) {
-                        return Text(
-                          'Likes: ${blogProvider.likeCount}',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      },
+                    const Text(
+                      'Like this blog?',
+                      style: const TextStyle(
+                        fontSize: 18,
+                      ),
                     ),
                     IconButton(
                       onPressed: () =>

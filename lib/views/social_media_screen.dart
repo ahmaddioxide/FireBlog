@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -14,7 +15,7 @@ class SocialMediaInput extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Social Media Input'),
+        title: const Text('Social Media Links'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -25,15 +26,15 @@ class SocialMediaInput extends StatelessWidget {
               controller: socialMediaData.linkedinController,
               decoration: const InputDecoration(
                 labelText: 'LinkedIn',
-                prefixIcon: Icon(Icons.link),
+                prefixIcon: Icon(FontAwesomeIcons.linkedin),
               ),
             ),
             const SizedBox(height: 16.0),
             TextFormField(
               controller: socialMediaData.facebookController,
-              decoration: const InputDecoration(
+              decoration:  const InputDecoration(
                 labelText: 'Facebook',
-                prefixIcon: Icon(Icons.facebook_rounded),
+                prefixIcon: Icon(FontAwesomeIcons.facebook),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -41,7 +42,7 @@ class SocialMediaInput extends StatelessWidget {
               controller: socialMediaData.twitterController,
               decoration: const InputDecoration(
                 labelText: 'Twitter',
-                prefixIcon: Icon(Icons.link_rounded),
+                prefixIcon: Icon(FontAwesomeIcons.twitter),
               ),
             ),
             const SizedBox(height: 16.0),
@@ -49,7 +50,7 @@ class SocialMediaInput extends StatelessWidget {
               controller: socialMediaData.instagramController,
               decoration: const InputDecoration(
                 labelText: 'Instagram',
-                prefixIcon: Icon(Icons.link_rounded),
+                prefixIcon: Icon(FontAwesomeIcons.instagram),
               ),
             ),
             const Spacer(),

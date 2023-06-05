@@ -40,7 +40,7 @@ class AuthController with ChangeNotifier {
 
       showSnackBar(context, 'Sign up successful!', Colors.green);
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const SocialMediaInput(),),
       );
