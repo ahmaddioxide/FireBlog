@@ -1,4 +1,4 @@
-import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/utils/utils.dart';
 import 'package:fireblog/views/content_input_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

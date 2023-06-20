@@ -1,9 +1,9 @@
-import 'package:fireblog/constants/constants.dart';
-import 'package:fireblog/views/bottom_navigation.dart';
+import 'package:fireblog/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import '../controllers/socials_media_controller.dart';

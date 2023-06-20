@@ -1,4 +1,6 @@
 
+import 'package:flutter/material.dart';
+
 nameValidation(value){
     if (value!.isEmpty) {
       return 'Please enter your name';
@@ -60,4 +62,12 @@ bool isValidWebsite(String? website) {
   const pattern = r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$';
   final regExp = RegExp(pattern, caseSensitive: false);
   return regExp.hasMatch(website);
+}
+
+void showSnackBar(BuildContext context, String message, Color backgroundColor) {
+  final snackBar = SnackBar(
+    content: Text(message),
+    backgroundColor: backgroundColor,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

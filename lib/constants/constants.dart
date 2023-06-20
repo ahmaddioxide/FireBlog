@@ -38,10 +38,3 @@ Map<String, Widget Function(BuildContext)> appRoutes={
 '/create_blog': (context) => const CreateBlog(),
 };
 
-void showSnackBar(BuildContext context, String message, Color backgroundColor) {
-  final snackBar = SnackBar(
-    content: Text(message),
-    backgroundColor: backgroundColor,
-  );
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-}

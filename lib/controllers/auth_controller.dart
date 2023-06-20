@@ -1,3 +1,4 @@
+import 'package:fireblog/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:fireblog/services/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,15 +22,15 @@ class AuthController with ChangeNotifier {
     try {
       setLoading(true);
 
-      UserCredential userCredential = await firebaseAuth
-          .createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+     await AuthServices().signUp(email, password, name).onError((error, stackTrace) {
+       if(error is FirebaseAuthException) {
 
-      String uid = userCredential.user!.uid;
+         FirebaseAuthCustomException.handleAuthenticationError(error);
+         debugPrint('Error during sign up: $errorMessage');       }
+     });
 
-      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+
+      await FirebaseFirestore.instance.collection('users').doc(AuthServices().currentUserUid()).set({
         'name': name,
         'email': email,
       });

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fireblog/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
 import '../services/services.dart';
@@ -20,16 +21,14 @@ class LoginController with ChangeNotifier {
     try {
       setLoading(true);
 
-      UserCredential userCredential = await firebaseAuth
-          .signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+     await AuthServices().signIn(email, password).onError((error, stackTrace) {
+        debugPrint('Error during login: $error');
+        FirebaseAuthCustomException.handleAuthenticationError(error);
+      });
 
-      String uid = userCredential.user!.uid;
 
       DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-          .collection('users').doc(uid).get();
+          .collection('users').doc(AuthServices().currentUserUid()).get();
 
       Map<String, dynamic> userData = userDataSnapshot.data() as Map<
           String,

@@ -1,11 +1,11 @@
-import 'package:fireblog/constants/constants.dart';
-import 'package:fireblog/controllers/login_controller.dart';
-import 'package:fireblog/models/user_data.dart';
-import 'package:fireblog/views/bottom_navigation.dart';
+
+import 'package:fireblog/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
-
+import 'package:fireblog/controllers/login_controller.dart';
+import 'package:fireblog/models/user_data.dart';
+import 'package:fireblog/views/bottom_navigation.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

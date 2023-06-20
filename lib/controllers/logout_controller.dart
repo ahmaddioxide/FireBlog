@@ -1,3 +1,4 @@
+import 'package:fireblog/services/auth_services.dart';
 import 'package:flutter/material.dart';
 
 import '../models/user_data.dart';
@@ -18,8 +19,7 @@ class LogoutController with ChangeNotifier {
   Future<void> logout() async {
     try {
       setLoading(true);
-
-      await firebaseAuth.signOut();
+      await AuthServices().signOut();
     } catch (error) {
       debugPrint('Error during logout: $error');
       FirebaseAuthCustomException.handleAuthenticationError(error);
