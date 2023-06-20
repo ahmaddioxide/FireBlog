@@ -1,7 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fireblog/views/bottom_navigation.dart';
-import 'package:flutter/material.dart';
 
 class SocialMediaData with ChangeNotifier {
   late TextEditingController linkedinController;
@@ -26,7 +25,7 @@ class SocialMediaData with ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> saveSocialMediaLinks(BuildContext context) async {
+  Future<void> saveSocialMediaLinks() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       final socialMediaLinks = <String, dynamic>{};
@@ -52,22 +51,9 @@ class SocialMediaData with ChangeNotifier {
             .doc(user.uid)
             .update(socialMediaLinks);
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Social media links saved successfully')),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error saving social media links: $e')),
-        );
-      } finally {
+
+      }  finally {
         setLoading(false);
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
       }
     }
   }

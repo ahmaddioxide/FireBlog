@@ -1,3 +1,5 @@
+import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/views/content_input_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,14 +12,16 @@ class CreateBlog extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => CreateBlogProvider(),
-      child: CreateBlogForm(),
+      child: const CreateBlogForm(),
     );
   }
 }
 
 class CreateBlogForm extends StatefulWidget {
+  const CreateBlogForm({super.key});
+
   @override
-  _CreateBlogFormState createState() => _CreateBlogFormState();
+  State<CreateBlogForm> createState() => _CreateBlogFormState();
 }
 
 class _CreateBlogFormState extends State<CreateBlogForm> {
@@ -144,7 +148,16 @@ class _CreateBlogFormState extends State<CreateBlogForm> {
               const Spacer(),
               ElevatedButton(
                 onPressed: () async {
-                  provider.createBlogPost(context);
+                  provider.createBlogPost(context).then((value) {
+                    Navigator.pop(context);
+
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => ContentInput(blogId: provider.blogId)),
+                    );
+                  }).onError((error, stackTrace) {
+                    showSnackBar(context,'Error', Colors.red,);
+                  });
 
                   // Perform any additional actions
                 },

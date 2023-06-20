@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/controllers/logout_controller.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../controllers/auth_controller..dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Provider.of<AuthController>(context);
+    LogoutController logoutController = Provider.of<LogoutController>(context);
 
     User? currentUser = FirebaseAuth.instance.currentUser;
     String uid = currentUser?.uid ?? '';
@@ -155,17 +155,23 @@ class ProfileScreen extends StatelessWidget {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      authController.logout(context);
+                      logoutController.logout().then((value) {
+                        Navigator.of(context).pushReplacementNamed('/login');
+                      }).onError((error, stackTrace) {
+                        showSnackBar(context, 'Error Logging Out', Colors.red);
+                      });
                     },
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.brown,
+                      backgroundColor: Colors.brown,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                     ),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 24.0, vertical: 12.0),
+                        horizontal: 24.0,
+                        vertical: 12.0,
+                      ),
                       child: Text(
                         'Logout',
                         style: TextStyle(

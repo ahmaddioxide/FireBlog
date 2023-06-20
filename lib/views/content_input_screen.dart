@@ -37,20 +37,23 @@ class _ContentInputState extends State<ContentInput> {
       await FirebaseFirestore.instance
           .collection('blogPosts')
           .doc(widget.blogId)
-          .update({'content': content}).then((value) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ),
-        );
-      }, onError: (e) {
-        print('Error saving content: $e');
-      });
+          .update({'content': content}).then(
+        (value) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const HomeScreen(),
+            ),
+          );
+        },
+        onError: (e) {
+          debugPrint('Error saving content: $e');
+        },
+      );
       _showSnackBar('Content saved successfully');
     } catch (e) {
       _showSnackBar('Error saving content');
-      print('Error saving content: $e');
+      debugPrint('Error saving content: $e');
     }
   }
 
@@ -92,7 +95,9 @@ class _ContentInputState extends State<ContentInput> {
                         height: MediaQuery.of(context).size.height * 0.7,
                         width: MediaQuery.of(context).size.width,
                         child: quill.QuillEditor.basic(
-                            controller: _controller, readOnly: false),
+                          controller: _controller,
+                          readOnly: false,
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),

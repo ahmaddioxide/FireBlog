@@ -1,20 +1,21 @@
 import 'dart:io';
+import 'package:fireblog/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import '../views/content_input_screen.dart';
 
 class CreateBlogProvider extends ChangeNotifier {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
   File? selectedImage;
-  String? currentUserUid;
+  String? _currentUserUid = currentUser?.uid;
   final picker = ImagePicker();
   final formKey = GlobalKey<FormState>();
   double uploadProgress = 0.0;
+  late final String blogId;
 
   Stream<double> uploadProgressStream = const Stream.empty();
 
@@ -35,7 +36,7 @@ class CreateBlogProvider extends ChangeNotifier {
   Future<void> _getCurrentUserUid() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      currentUserUid = user.uid;
+      _currentUserUid = user.uid;
     }
   }
 
@@ -88,7 +89,7 @@ class CreateBlogProvider extends ChangeNotifier {
   }
 
   Future<void> createBlogPost(BuildContext context) async {
-    if (currentUserUid == null) {
+    if (_currentUserUid == null) {
       return;
     }
 
@@ -109,7 +110,10 @@ class CreateBlogProvider extends ChangeNotifier {
                 SizedBox(height: 16.0),
                 Text(
                   'Creating Blog Post...',
-                  style: TextStyle(fontSize: 16.0, color: Colors.brown,),
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    color: Colors.brown,
+                  ),
                 ),
               ],
             ),
@@ -126,14 +130,14 @@ class CreateBlogProvider extends ChangeNotifier {
     final blogPost = {
       'title': title,
       'description': description,
-      'authorUid': currentUserUid,
+      'authorUid': _currentUserUid,
       'imageUrl': imageUrl,
     };
 
     try {
       final DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(currentUserUid)
+          .doc(_currentUserUid)
           .get();
 
       final int currentBlogsPublished =
@@ -143,22 +147,14 @@ class CreateBlogProvider extends ChangeNotifier {
 
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(currentUserUid)
+          .doc(_currentUserUid)
           .update({'blogsPublished': updatedBlogsPublished});
 
       final DocumentReference blogRef = await FirebaseFirestore.instance
           .collection('blogPosts')
           .add(blogPost);
-      final String blogId = blogRef.id;
-
-      Navigator.pop(context);
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ContentInput(blogId: blogId)),
-      );
+      blogId = blogRef.id;
     } catch (e) {
-      // Error occurred while creating the blog post
       debugPrint('Error creating blog post: $e');
     }
   }

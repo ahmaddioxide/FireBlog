@@ -1,3 +1,5 @@
+import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +34,7 @@ class SocialMediaInput extends StatelessWidget {
             const SizedBox(height: 16.0),
             TextFormField(
               controller: socialMediaData.facebookController,
-              decoration:  const InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Facebook',
                 prefixIcon: Icon(FontAwesomeIcons.facebook),
               ),
@@ -55,7 +57,24 @@ class SocialMediaInput extends StatelessWidget {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () => socialMediaData.saveSocialMediaLinks(context),
+              onPressed: () =>
+                  socialMediaData.saveSocialMediaLinks().then((value) {
+                showSnackBar(context, 'Links saved Successfully', Colors.green);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomeScreen(),
+                  ),
+                );
+              }).onError(
+                (error, stackTrace) {
+                  showSnackBar(
+                    context,
+                    'Error saving social media links: $error',
+                    Colors.red,
+                  );
+                },
+              ),
               child: Stack(
                 alignment: Alignment.center,
                 children: [

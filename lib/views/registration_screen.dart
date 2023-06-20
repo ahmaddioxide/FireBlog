@@ -1,15 +1,18 @@
+import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/models/user_data.dart';
+import 'package:fireblog/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
-import '../controllers/auth_controller..dart';
-import 'login_screen.dart';
+import '../controllers/auth_controller.dart';
+import 'social_media_screen.dart';
 
 class Registration extends StatefulWidget {
   const Registration({Key? key}) : super(key: key);
 
   @override
-  _RegistrationState createState() => _RegistrationState();
+  State<Registration> createState() => _RegistrationState();
 }
 
 class _RegistrationState extends State<Registration> {
@@ -57,12 +60,7 @@ class _RegistrationState extends State<Registration> {
                       prefixIcon: Icon(Icons.person),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter your name';
-                      } else if (value.length < 3) {
-                        return 'Name must be at least 3 characters';
-                      }
-                      return null;
+                  return  nameValidation(value);
                     },
                   ),
                   const SizedBox(height: 16.0),
@@ -74,26 +72,7 @@ class _RegistrationState extends State<Registration> {
                       prefixIcon: Icon(Icons.email),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter your email';
-                      } else if (!value.contains('@')) {
-                        return 'Please enter a valid email';
-                      } else if (!value.contains('.')) {
-                        return 'Please enter a valid email';
-                      } else if (value.length < 5) {
-                        return 'Email must be at least 5 characters';
-                      } else if (value.length > 50) {
-                        return 'Email must be less than 50 characters';
-                      } else if (value.contains(' ')) {
-                        return 'Email cannot contain spaces';
-                      } else if (value.contains('..')) {
-                        return 'Email cannot contain consecutive periods';
-                      } else if (value.contains('.@')) {
-                        return 'Email cannot contain a period before the @ symbol';
-                      } else if (value.contains('@.')) {
-                        return 'Email cannot contain a period after the @ symbol';
-                      }
-                      return null;
+                      return emailValidation(value);
                     },
                   ),
                   const SizedBox(height: 16.0),
@@ -118,25 +97,7 @@ class _RegistrationState extends State<Registration> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter your password';
-                      } else if (value.length < 8) {
-                        return 'Password must be at least 8 characters';
-                      } else if (value.length > 50) {
-                        return 'Password must be less than 50 characters';
-                      } else if (value.contains(' ')) {
-                        return 'Password cannot contain spaces';
-                      } else if (!value.contains(RegExp(r'[A-Z]'))) {
-                        return 'Password must contain at least one uppercase letter';
-                      } else if (!value.contains(RegExp(r'[a-z]'))) {
-                        return 'Password must contain at least one lowercase letter';
-                      } else if (!value.contains(RegExp(r'[0-9]'))) {
-                        return 'Password must contain at least one number';
-                      } else if (!value
-                          .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-                        return 'Password must contain at least one special character';
-                      }
-                      return null;
+                      return passwordValidation(value);
                     },
                   ),
                   const SizedBox(height: 16.0),
@@ -161,14 +122,14 @@ class _RegistrationState extends State<Registration> {
                       ),
                     ),
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please confirm your password';
-                      } else if (value !=
+                      if (value !=
                           _passwordController.text.toString().trim()) {
                         return 'Passwords do not match';
                       }
-                      return null;
+
+                      return passwordValidation(value);
                     },
+
                   ),
                   const SizedBox(height: 24.0),
                   SizedBox(
@@ -182,11 +143,20 @@ class _RegistrationState extends State<Registration> {
                             _authController.setLoading(true);
                           });
                           await _authController.signUp(
-                            context,
                             _emailController.text.toString().trim(),
                             _passwordController.text.toString().trim(),
                             _nameController.text.toString().trim(),
-                          );
+                          ).then((value) {
+                            Provider.of<UserData>(context, listen: false).updateUserData(_authController.userData);
+                            showSnackBar(context, 'Sign up successful!', Colors.green);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SocialMediaInput(),),
+                            ).onError((error, stackTrace) {
+                              showSnackBar(context, error.toString(), Colors.red);
+
+                            });
+                          });
                           setState(() {
                             _authController.setLoading(false);
                           });

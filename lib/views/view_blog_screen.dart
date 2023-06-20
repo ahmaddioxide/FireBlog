@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import 'blog_info_screen.dart';
 
 class ViewBlog extends StatefulWidget {
@@ -63,15 +61,20 @@ class _ViewBlogState extends State<ViewBlog> {
       final content = snapshot.data()?['content'];
 
       if (content != null) {
-        setState(() {
-          _controller = quill.QuillController(
+        setState(
+          () {
+            _controller = quill.QuillController(
               document: quill.Document.fromJson(content),
               selection: const TextSelection.collapsed(
-                  offset: 0, affinity: TextAffinity.upstream));
-        });
+                offset: 0,
+                affinity: TextAffinity.upstream,
+              ),
+            );
+          },
+        );
       }
     } catch (e) {
-      print('Error fetching content: $e');
+      debugPrint('Error fetching content: $e');
     }
   }
 
@@ -103,53 +106,46 @@ class _ViewBlogState extends State<ViewBlog> {
           ),
         ],
       ),
-      body: _controller != null
-          ? Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  Text(
-                    widget.title,
-                    style: const TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  FutureBuilder(
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return Text(
-                          'By ${snapshot.data}',
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
-                    future: getAuthorName(),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: quill.QuillEditor.basic(
-                      controller: _controller,
-                      readOnly: true,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : const Center(
-              child: SpinKitWave(
-                color: Colors.brown,
-                size: 50.0,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Text(
+              widget.title,
+              style: const TextStyle(
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
               ),
             ),
+            const SizedBox(height: 10),
+            FutureBuilder(
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  return Text(
+                    'By ${snapshot.data}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
+              future: getAuthorName(),
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: quill.QuillEditor.basic(
+                controller: _controller,
+                readOnly: true,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

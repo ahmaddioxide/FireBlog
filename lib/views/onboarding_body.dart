@@ -1,9 +1,12 @@
+import 'package:fireblog/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:fireblog/views/registration_screen.dart';
 
 class OnboardingBody extends StatefulWidget {
+  const OnboardingBody({super.key});
+
   @override
-  _OnboardingBodyState createState() => _OnboardingBodyState();
+  State<OnboardingBody> createState() => _OnboardingBodyState();
 }
 
 class _OnboardingBodyState extends State<OnboardingBody> {
@@ -22,26 +25,6 @@ class _OnboardingBodyState extends State<OnboardingBody> {
     super.dispose();
   }
 
-  List<Map<String, String>> onboardData = [
-    {
-      "text":
-          "Welcome to FireBlog, the talented development and community wing dedicated to the growth of the digital world. Join us on this exciting journey!",
-      "image": "assets/images/onboard1.png",
-      "heading": "Welcome to FireBlog"
-    },
-    {
-      "text":
-          "With FireBlog, you can unleash your creativity and express yourself through blogs. Create captivating content and share it with a vibrant community of passionate individuals. ",
-      "image": "assets/images/onboard2.png",
-      "heading": "Create and Share"
-    },
-    {
-      "text":
-          "Dive into a world of inspiration and knowledge. Explore blogs crafted by talented writers, connect with like-minded individuals, and foster meaningful conversations within the FireBlog community.",
-      "image": "assets/images/onboard3.png",
-      "heading": "Explore and Connect"
-    },
-  ];
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
@@ -66,20 +49,23 @@ class _OnboardingBodyState extends State<OnboardingBody> {
                         padding:
                             EdgeInsets.symmetric(horizontal: height * 0.02),
                         child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const Registration()));
-                            },
-                            child: const Text(
-                              'Skip',
-                              style: TextStyle(
-                                  color: Colors.brown,
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 24),
-                            )),
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Registration(),
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            'Skip',
+                            style: TextStyle(
+                              color: Colors.brown,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 24,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -191,10 +177,12 @@ class OnboardContent extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     return Column(
       children: <Widget>[
-        Text(heading!,
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  fontSize: 18,
-                )),
+        Text(
+          heading!,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                fontSize: 18,
+              ),
+        ),
         Container(
           width: width * 0.3,
           height: 4,
@@ -212,10 +200,11 @@ class OnboardContent extends StatelessWidget {
         SizedBox(
           height: height * 0.05,
         ),
-        Text(text!,
-            style:
-                Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18),
-            textAlign: TextAlign.center),
+        Text(
+          text!,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontSize: 18),
+          textAlign: TextAlign.center,
+        ),
       ],
     );
   }

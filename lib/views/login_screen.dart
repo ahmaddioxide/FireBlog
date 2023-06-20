@@ -1,20 +1,24 @@
+import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/controllers/login_controller.dart';
+import 'package:fireblog/models/user_data.dart';
+import 'package:fireblog/views/bottom_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:provider/provider.dart';
 
-import '../controllers/auth_controller..dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  _LoginState createState() => _LoginState();
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthController _authController = AuthController();
+  final LoginController _loginController = LoginController();
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -107,11 +111,25 @@ class _LoginState extends State<Login> {
                                 setState(() {
                                   _isLoading = true;
                                 });
-                                await _authController.login(
-                                  context,
+                                await _loginController.login(
                                   _emailController.text.toString().trim(),
                                   _passwordController.text.toString().trim(),
-                                );
+                                ).then((value) {
+                                  Provider.of<UserData>(context, listen: false).updateUserData(_loginController.userData);
+
+                                  showSnackBar(context, 'Login successful!', Colors.green);
+
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => const HomeScreen(),),
+                                  );
+                                }).onError((error, stackTrace) {
+                                  showSnackBar(context, error.toString(), Colors.red);
+                                }).whenComplete(() {
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                });
                                 setState(() {
                                   _isLoading = false;
                                 });

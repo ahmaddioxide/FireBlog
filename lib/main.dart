@@ -1,4 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'package:fireblog/constants/constants.dart';
+import 'package:fireblog/controllers/login_controller.dart';
+import 'package:fireblog/controllers/logout_controller.dart';
+import 'package:fireblog/services/services.dart';
 import 'package:flutter/material.dart';
 import 'firebase_options.dart';
 
@@ -8,18 +11,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'controllers/auth_controller..dart';
+import 'controllers/auth_controller.dart';
 import 'controllers/socials_media_controller.dart';
-import 'controllers/user_data.dart';
+import 'models/user_data.dart';
 
 import 'package:fireblog/views/bottom_navigation.dart';
-import 'package:fireblog/views/profile_screen.dart';
-import 'package:fireblog/views/registration_screen.dart';
 import 'package:fireblog/views/onboarding_screen.dart';
-import 'package:fireblog/views/social_media_screen.dart';
 import 'views/blogs_screen.dart';
-import 'views/create_blog_screen.dart';
-import 'views/login_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +26,7 @@ Future<void> main() async {
   );
   runApp(
     DevicePreview(
-      enabled: !kReleaseMode,
+      enabled: false,
       builder: (context) => MultiProvider(
         providers: [
           ChangeNotifierProvider<AuthController>(
@@ -44,7 +42,14 @@ Future<void> main() async {
             create: (context) => BlogProvider(),
           ),
           ChangeNotifierProvider<BlogInfoProvider>(
-              create: (context) => BlogInfoProvider()),
+            create: (context) => BlogInfoProvider(),
+          ),
+          ChangeNotifierProvider<LoginController>(
+            create: (context) => LoginController(),
+          ),
+          ChangeNotifierProvider<LogoutController>(
+            create: (context) => LogoutController(),
+          ),
         ],
         child: const MyApp(),
       ),
@@ -53,11 +58,12 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key});
+  const MyApp({super.key,});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       builder: DevicePreview.appBuilder,
       locale: DevicePreview.locale(context),
       title: 'FireBlog',
@@ -67,22 +73,14 @@ class MyApp extends StatelessWidget {
       ),
       home: Consumer<AuthController>(
         builder: (context, authController, _) {
-          if (authController.currentUser != null) {
+          if (currentUser != null) {
             return const HomeScreen();
           } else {
             return const OnBoardingPage();
           }
         },
       ),
-      routes: {
-        '/login': (context) => const Login(),
-        '/registration': (context) => const Registration(),
-        '/social_media_links': (context) => const SocialMediaInput(),
-        '/home': (context) => const HomeScreen(),
-        '/onboarding': (context) => const OnBoardingPage(),
-        '/view_profile': (context) => const ProfileScreen(),
-        '/create_blog': (context) => const CreateBlog(),
-      },
+      routes: appRoutes,
     );
   }
 }

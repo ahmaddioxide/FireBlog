@@ -115,7 +115,7 @@ class BlogInfo extends StatelessWidget {
                         children: [
                           if (userData['facebook'] != null)
                             GestureDetector(
-                              onTap: () => launch(userData['facebook']),
+                              onTap: () => launchUrl(userData['facebook']),
                               child: const Icon(
                                 FontAwesomeIcons.facebook,
                                 size: 50,
@@ -125,7 +125,7 @@ class BlogInfo extends StatelessWidget {
                           const SizedBox(width: 10.0),
                           if (userData['instagram'] != null)
                             GestureDetector(
-                              onTap: () => launch(userData['instagram']),
+                              onTap: () => launchUrl(userData['instagram']),
                               child: const Icon(
                                 FontAwesomeIcons.instagram,
                                 size: 50,
@@ -137,7 +137,7 @@ class BlogInfo extends StatelessWidget {
                           ),
                           if (userData['twitter'] != null)
                             GestureDetector(
-                              onTap: () => launch(userData['twitter']),
+                              onTap: () => launchUrl(userData['twitter']),
                               child: const Icon(
                                 FontAwesomeIcons.twitter,
                                 size: 50,
@@ -149,12 +149,12 @@ class BlogInfo extends StatelessWidget {
                           ),
                           if (userData['linkedin'] != null)
                             GestureDetector(
-                                onTap: () => launch(userData['linkedin']),
+                                onTap: () => launchUrl(userData['linkedin']),
                                 child: const Icon(
                                   FontAwesomeIcons.linkedin,
                                   size: 50,
                                   color: Colors.brown,
-                                )),
+                                ),),
                         ],
                       ),
                   ],

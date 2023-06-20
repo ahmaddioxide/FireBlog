@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
 import 'package:fireblog/views/view_blog_screen.dart';
 import 'create_blog_screen.dart';
 
@@ -52,14 +50,16 @@ class BlogScreen extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   if (blogId != null) {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => ViewBlog(
-                        blogId: blogId,
-                        authorId: authorId,
-                        title: title,
-                        description: description,
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ViewBlog(
+                          blogId: blogId,
+                          authorId: authorId,
+                          title: title,
+                          description: description,
+                        ),
                       ),
-                    ));
+                    );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
