@@ -1,3 +1,5 @@
+import 'package:fireblog/services/firestore_services.dart';
+import 'package:fireblog/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,13 +48,14 @@ class SocialMediaData with ChangeNotifier {
       try {
         setLoading(true);
 
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(user.uid)
-            .update(socialMediaLinks);
-
-
-      }  finally {
+        await FirestoreServices()
+            .uploadSocialMediaLinks(
+          socialMediaLinks,
+        )
+            .onError((error, stackTrace) {
+          debugPrint('Error during uploadSocialMediaLinks: $error');
+        });
+      } finally {
         setLoading(false);
       }
     }

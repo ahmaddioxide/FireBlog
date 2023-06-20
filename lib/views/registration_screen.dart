@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
-import '../controllers/auth_controller.dart';
+import '../controllers/signup_controller.dart';
 import 'social_media_screen.dart';
 
 class Registration extends StatefulWidget {
@@ -22,7 +22,7 @@ class _RegistrationState extends State<Registration> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final AuthController _authController = AuthController();
+  final SignUpController _signUpController = SignUpController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 
@@ -138,16 +138,16 @@ class _RegistrationState extends State<Registration> {
                     child: ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
-                            !_authController.loading) {
+                            !_signUpController.loading) {
                           setState(() {
-                            _authController.setLoading(true);
+                            _signUpController.setLoading(true);
                           });
-                          await _authController.signUp(
+                          await _signUpController.signUp(
                             _emailController.text.toString().trim(),
                             _passwordController.text.toString().trim(),
                             _nameController.text.toString().trim(),
                           ).then((value) {
-                            Provider.of<UserData>(context, listen: false).updateUserData(_authController.userData);
+                            Provider.of<UserData>(context, listen: false).updateUserData(_signUpController.userData);
                             showSnackBar(context, 'Sign up successful!', Colors.green);
                             Navigator.pushReplacement(
                               context,
@@ -158,7 +158,7 @@ class _RegistrationState extends State<Registration> {
                             });
                           });
                           setState(() {
-                            _authController.setLoading(false);
+                            _signUpController.setLoading(false);
                           });
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -171,13 +171,13 @@ class _RegistrationState extends State<Registration> {
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
-                          if (_authController.loading)
+                          if (_signUpController.loading)
 
                             const SpinKitWave(
                               color: Colors.white,
                               size: 25.0,
                             ),
-                          if (!_authController.loading) const Text("Sign Up"),
+                          if (!_signUpController.loading) const Text("Sign Up"),
                         ],
                       ),
                     ),

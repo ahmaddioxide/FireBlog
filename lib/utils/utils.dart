@@ -1,16 +1,15 @@
-
 import 'package:flutter/material.dart';
 
-nameValidation(value){
-    if (value!.isEmpty) {
-      return 'Please enter your name';
-    } else if (value.length < 3) {
-      return 'Name must be at least 3 characters';
-    }
-    return null;
+nameValidation(value) {
+  if (value!.isEmpty) {
+    return 'Please enter your name';
+  } else if (value.length < 3) {
+    return 'Name must be at least 3 characters';
+  }
+  return null;
 }
 
-emailValidation(value){
+emailValidation(value) {
   if (value!.isEmpty) {
     return 'Please enter your email';
   } else if (!value.contains('@')) {
@@ -33,7 +32,7 @@ emailValidation(value){
   return null;
 }
 
-passwordValidation(value){
+passwordValidation(value) {
   if (value!.isEmpty) {
     return 'Please enter your password';
   } else if (value.length < 8) {
@@ -48,8 +47,7 @@ passwordValidation(value){
     return 'Password must contain at least one lowercase letter';
   } else if (!value.contains(RegExp(r'[0-9]'))) {
     return 'Password must contain at least one number';
-  } else if (!value
-      .contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+  } else if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
     return 'Password must contain at least one special character';
   }
   return null;
@@ -59,7 +57,8 @@ bool isValidWebsite(String? website) {
   if (website == null || website.isEmpty) {
     return true;
   }
-  const pattern = r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$';
+  const pattern =
+      r'^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w\.-]*)*\/?$';
   final regExp = RegExp(pattern, caseSensitive: false);
   return regExp.hasMatch(website);
 }

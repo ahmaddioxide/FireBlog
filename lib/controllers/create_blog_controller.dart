@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:fireblog/services/cloud_storage_services.dart';
 import 'package:fireblog/services/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -53,38 +54,17 @@ class CreateBlogProvider extends ChangeNotifier {
   }
 
   Future<String?> uploadImageToFirebase() async {
+    String? imageUrl;
     if (selectedImage == null) {
       return null;
     }
 
     try {
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('blog_images')
-          .child('${DateTime.now().millisecondsSinceEpoch}.jpg');
-
-      final uploadTask = storageRef.putFile(
-        selectedImage!,
-        SettableMetadata(
-          contentType: 'image/jpeg',
-        ),
-      );
-
-      uploadProgressStream = uploadTask.snapshotEvents.map(
-        (TaskSnapshot snapshot) =>
-            snapshot.bytesTransferred / snapshot.totalBytes,
-      );
-
-      final taskSnapshot = await uploadTask.whenComplete(() {});
-
-      if (taskSnapshot.state == TaskState.success) {
-        final imageUrl = await storageRef.getDownloadURL();
-        return imageUrl;
-      }
+     imageUrl= await CloudStorageServices().uploadAndGetUrl(selectedImage);
+     return imageUrl;
     } catch (e) {
       debugPrint('Error uploading image to Firebase: $e');
     }
-
     return null;
   }
 

@@ -149,12 +149,13 @@ class BlogInfo extends StatelessWidget {
                           ),
                           if (userData['linkedin'] != null)
                             GestureDetector(
-                                onTap: () => launchUrl(userData['linkedin']),
-                                child: const Icon(
-                                  FontAwesomeIcons.linkedin,
-                                  size: 50,
-                                  color: Colors.brown,
-                                ),),
+                              onTap: () => launchUrl(userData['linkedin']),
+                              child: const Icon(
+                                FontAwesomeIcons.linkedin,
+                                size: 50,
+                                color: Colors.brown,
+                              ),
+                            ),
                         ],
                       ),
                   ],
@@ -168,7 +169,7 @@ class BlogInfo extends StatelessWidget {
                   children: [
                     const Text(
                       'Like this blog?',
-                      style:  TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
                       ),
                     ),

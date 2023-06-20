@@ -1,3 +1,4 @@
+import 'package:fireblog/services/firestore_services.dart';
 import 'package:flutter/material.dart';
 import 'package:fireblog/services/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,10 +11,7 @@ class BlogInfoProvider extends ChangeNotifier {
     if (authorId == null || authorId.isEmpty) {
       return Future.value(null);
     }
-    final userData = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(authorId)
-        .get();
+    final userData = await FirestoreServices().getUserFromAuthorId(authorId);
     if (userData.exists) {
       return Future.value(userData);
     }
@@ -21,16 +19,13 @@ class BlogInfoProvider extends ChangeNotifier {
   }
 
   Future<void> updateLikeCount(String blogId) async {
-    final blogRef =
-    blogPostsRef.doc(blogId);
-
-    final blogSnapshot = await blogRef.get();
+    final blogSnapshot = await FirestoreServices().getBlogSnapshot(blogId);
     final currentLikes = blogSnapshot.data()?['likes'] ?? 0;
     final likedBy = blogSnapshot.data()?['likedBy'] ?? [];
 
     if (currentUser != null && likedBy.contains(currentUser?.uid)) {
       likedBy.remove(currentUser?.uid);
-      await blogRef.update(
+      await FirestoreServices().currentBlogRef(blogId).update(
         {'likes': currentLikes - 1, 'likedBy': likedBy},
       ).onError(
         (error, stackTrace) {
@@ -41,7 +36,7 @@ class BlogInfoProvider extends ChangeNotifier {
       isLiked = false;
     } else {
       likedBy.add(currentUser?.uid);
-      await blogRef.update(
+      await FirestoreServices().currentBlogRef(blogId).update(
         {'likes': currentLikes + 1, 'likedBy': likedBy},
       ).onError(
         (error, stackTrace) {
@@ -56,10 +51,7 @@ class BlogInfoProvider extends ChangeNotifier {
   }
 
   Future<void> fetchLikeCount(String blogId) async {
-    final blogRef =
-        blogPostsRef.doc(blogId);
-
-    final blogSnapshot = await blogRef.get();
+    final blogSnapshot = await FirestoreServices().getBlogSnapshot(blogId);
     final currentLikes = blogSnapshot.data()?['likes'] ?? 0;
     final likedBy = blogSnapshot.data()?['likedBy'] ?? [];
     isLiked = currentUser != null && likedBy.contains(currentUser?.uid);

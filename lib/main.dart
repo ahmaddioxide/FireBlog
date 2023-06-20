@@ -11,7 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
-import 'controllers/auth_controller.dart';
+import 'controllers/signup_controller.dart';
 import 'controllers/socials_media_controller.dart';
 import 'models/user_data.dart';
 
@@ -29,8 +29,8 @@ Future<void> main() async {
       enabled: false,
       builder: (context) => MultiProvider(
         providers: [
-          ChangeNotifierProvider<AuthController>(
-            create: (context) => AuthController(),
+          ChangeNotifierProvider<SignUpController>(
+            create: (context) => SignUpController(),
           ),
           ChangeNotifierProvider<UserData>(
             create: (context) => UserData(),
@@ -71,7 +71,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.brown,
         textTheme: GoogleFonts.robotoTextTheme(Theme.of(context).textTheme),
       ),
-      home: Consumer<AuthController>(
+      home: Consumer<SignUpController>(
         builder: (context, authController, _) {
           if (currentUser != null) {
             return const HomeScreen();

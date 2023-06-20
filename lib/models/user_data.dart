@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'user_data.g.dart';
+
+@JsonSerializable()
 class UserData with ChangeNotifier {
   String name;
   String email;
@@ -22,4 +26,8 @@ class UserData with ChangeNotifier {
     email = newData.email;
     notifyListeners();
   }
+
+  factory UserData.fromJson(Map<String, dynamic> json) => _$UserDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserDataToJson(this);
 }
